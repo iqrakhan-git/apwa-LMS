@@ -4,134 +4,187 @@ import { useNavigate } from "react-router-dom";
 import {
   GraduationCap,
   LockKeyhole,
-  Eye,
-  EyeOff,
   ArrowRight,
   ContactRound,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/auth";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  limit,
+} from "firebase/firestore";
+
+import {  loginUser } from "../components/Auth/Auth.js";
+import {db} from "./../firebase/config.js"
 
 function Login() {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("error");
-
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     studentId: "",
     password: "",
   });
 
-  const showMessage = (text, type = "error") => {
-    setMessage(text);
-    setMessageType(type);
-  };
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // =========================
+  // Input Change
+  // =========================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    setMessage("");
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+      general: "",
+    }));
   };
 
-  // Login using Express + MongoDB backend
+  // =========================
+  // Validation
+  // =========================
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.studentId.trim()) {
+      newErrors.studentId = "Student ID is required.";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // =========================
+  // Find Student Email
+  // =========================
+
+  const getStudentEmail = async (studentId) => {
+    const studentsRef = collection(db, "students");
+
+    const studentQuery = query(
+      studentsRef,
+      where("studentId", "==", studentId.trim()),
+      limit(1)
+    );
+
+    const snapshot = await getDocs(studentQuery);
+
+    if (snapshot.empty) {
+      return null;
+    }
+
+    const studentData = snapshot.docs[0].data();
+
+    return studentData.email || null;
+  };
+
+  // =========================
+  // Login
+  // =========================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const studentId = form.studentId.trim();
-    const password = form.password;
-
-    if (!studentId || !password) {
-      showMessage("Please enter your Student ID and password.");
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
-    setMessage("");
+    setErrors({});
 
     try {
-      const response = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          studentId,
-          password,
-        }),
-      });
+      // Find the student's email using their Student ID.
+      const email = await getStudentEmail(formData.studentId);
 
-      const data = await response.json();
+      if (!email) {
+        setErrors({
+          studentId:
+            "Student ID not found. Please check your Student ID.",
+        });
 
-      if (!response.ok) {
-        showMessage(data.message || "Invalid Student ID or password.");
         return;
       }
 
-      // Expect the backend to return a student object.
-      const student = data.student;
+      // Firebase Authentication uses email and password.
+      const result = await loginUser(
+        email,
+        formData.password
+      );
 
-      if (!student) {
-        showMessage("Student information was not returned by the server.");
-        return;
+      if (result?.success) {
+        console.log("Login successful");
+        console.log("User:", result.user);
+
+        navigate("/dashboard");
+      } else {
+        const errorCode = result?.error?.code || result?.error;
+
+        switch (errorCode) {
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+          case "auth/invalid-credential":
+            setErrors({
+              general: "Student ID or password is incorrect.",
+            });
+            break;
+
+          case "auth/invalid-email":
+            setErrors({
+              general:
+                "The email associated with this student account is invalid.",
+            });
+            break;
+
+          case "auth/too-many-requests":
+            setErrors({
+              general:
+                "Too many login attempts. Please try again later.",
+            });
+            break;
+
+          default:
+            setErrors({
+              general:
+                "Unable to log in. Please try again.",
+            });
+        }
       }
-
-      if (
-        student.role !== "student" ||
-        student.studentId?.trim().toLowerCase() !==
-          studentId.toLowerCase()
-      ) {
-        showMessage("This account is not authorized for the student portal.");
-        return;
-      }
-
-      if (student.status && student.status !== "active") {
-        showMessage("Your account is inactive. Please contact your administrator.");
-        return;
-      }
-
-      // Store the token if the backend provides one.
-      // Use sessionStorage when Remember Me is unchecked.
-      if (data.token) {
-        const storage = rememberMe ? localStorage : sessionStorage;
-
-        // Clear a previously stored token from the other storage.
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("token");
-
-        storage.setItem("token", data.token);
-      }
-
-      showMessage("Login successful!", "success");
-
-      navigate("/dashboard", {
-        replace: true,
-        state: { profile: student },
-      });
     } catch (error) {
       console.error("Login error:", error);
 
-      showMessage(
-        "Unable to connect to the server. Please check your backend."
-      );
+      setErrors({
+        general:
+          "Something went wrong. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
   };
+
+  // =========================
+  // UI
+  // =========================
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-3 sm:p-6">
       <div className="grid min-h-[650px] w-full max-w-6xl grid-cols-1 overflow-hidden rounded-2xl bg-surface shadow-elevated lg:grid-cols-2">
 
         {/* LEFT SIDE */}
+
         <div
           className="relative min-h-[280px] bg-cover bg-center lg:min-h-[650px]"
           style={{
@@ -144,6 +197,7 @@ function Login() {
           <div className="relative z-10 flex h-full min-h-[280px] flex-col justify-between p-6 text-white sm:p-9 lg:min-h-[650px] lg:p-10">
 
             {/* Logo */}
+
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-white/15 p-2 backdrop-blur-md">
                 <GraduationCap size={27} />
@@ -153,6 +207,7 @@ function Login() {
                 <h2 className="text-lg font-bold tracking-wide">
                   Student Portal
                 </h2>
+
                 <p className="text-[11px] text-white/70">
                   Your learning journey starts here
                 </p>
@@ -160,6 +215,7 @@ function Login() {
             </div>
 
             {/* Welcome Content */}
+
             <div className="max-w-md py-8 lg:py-0">
               <span className="mb-4 inline-block rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-medium backdrop-blur-md">
                 Welcome to your campus
@@ -170,7 +226,9 @@ function Login() {
                 <br />
                 Grow.
                 <br />
-                <span className="text-primary-light">Achieve.</span>
+                <span className="text-primary-light">
+                  Achieve.
+                </span>
               </h1>
 
               <p className="mt-5 max-w-sm text-sm leading-7 text-white/85 sm:text-base">
@@ -187,6 +245,7 @@ function Login() {
             </div>
 
             {/* Footer */}
+
             <div className="hidden items-center justify-between gap-4 border-t border-white/20 pt-5 text-xs text-white/70 lg:flex">
               <p>Empowering students every day.</p>
               <p>© 2026 Student Portal</p>
@@ -195,10 +254,12 @@ function Login() {
         </div>
 
         {/* RIGHT SIDE */}
+
         <div className="flex items-center justify-center bg-surface p-5 sm:p-10 lg:p-12 xl:p-16">
           <div className="w-full max-w-md">
 
             {/* Heading */}
+
             <div className="mb-8">
               <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft text-primary-dark">
                 <GraduationCap size={27} />
@@ -214,9 +275,15 @@ function Login() {
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
+
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-5"
+              noValidate
+            >
 
               {/* STUDENT ID */}
+
               <div>
                 <label
                   htmlFor="studentId"
@@ -235,18 +302,39 @@ function Login() {
                     id="studentId"
                     type="text"
                     name="studentId"
-                    value={form.studentId}
+                    value={formData.studentId}
                     onChange={handleChange}
                     placeholder="Enter your Student ID"
                     autoComplete="username"
                     required
                     disabled={loading}
-                    className="w-full rounded-input border border-border bg-surface py-3 pl-11 pr-4 text-sm text-heading outline-none transition placeholder:text-body focus:border-primary focus:ring-4 focus:ring-primary-light/50 disabled:opacity-60"
+                    aria-invalid={Boolean(errors.studentId)}
+                    aria-describedby={
+                      errors.studentId
+                        ? "studentId-error"
+                        : undefined
+                    }
+                    className={`${
+                      errors.studentId
+                        ? "border-red-500"
+                        : "border-border-light"
+                    } w-full rounded-input border border-border bg-surface py-3 pl-11 pr-4 text-sm text-heading outline-none transition placeholder:text-body focus:border-primary focus:ring-4 focus:ring-primary-light/50 disabled:opacity-60`}
                   />
                 </div>
+
+                {errors.studentId && (
+                  <p
+                    id="studentId-error"
+                    role="alert"
+                    className="mt-2 text-sm text-red-600"
+                  >
+                    {errors.studentId}
+                  </p>
+                )}
               </div>
 
               {/* PASSWORD */}
+
               <div>
                 <label
                   htmlFor="password"
@@ -265,72 +353,67 @@ function Login() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     name="password"
-                    value={form.password}
+                    value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
                     autoComplete="current-password"
                     required
                     disabled={loading}
-                    className="w-full rounded-input border border-border bg-surface py-3 pl-11 pr-12 text-sm text-heading outline-none transition placeholder:text-body focus:border-primary focus:ring-4 focus:ring-primary-light/50 disabled:opacity-60"
+                    aria-invalid={Boolean(errors.password)}
+                    aria-describedby={
+                      errors.password
+                        ? "password-error"
+                        : undefined
+                    }
+                    className={`${
+                      errors.password
+                        ? "border-red-500"
+                        : "border-border"
+                    } w-full rounded-input border bg-surface py-3 pl-11 pr-16 text-sm text-heading outline-none transition placeholder:text-body focus:border-primary focus:ring-4 focus:ring-primary-light/50 disabled:opacity-60`}
                   />
 
                   <button
                     type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-body transition hover:text-primary-dark"
+                    onClick={() =>
+                      setShowPassword((prev) => !prev)
+                    }
+                    disabled={loading}
+                    aria-label={
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-body transition hover:text-primary-dark disabled:opacity-60"
                   >
-                    {showPassword ? (
-                      <EyeOff size={17} />
-                    ) : (
-                      <Eye size={17} />
-                    )}
+                    {showPassword ? "Hide" : "Show"}
                   </button>
                 </div>
-              </div>
 
-              {/* REMEMBER ME & FORGOT PASSWORD */}
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <label className="flex cursor-pointer items-center gap-2 text-sm text-body">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 accent-primary"
-                  />
-                  Remember me
-                </label>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    showMessage(
-                      "Please contact your administrator to reset your password."
-                    )
-                  }
-                  disabled={loading}
-                  className="text-xs font-semibold text-primary transition hover:text-primary-dark disabled:opacity-50"
-                >
-                  Forgot password?
-                </button>
+                {errors.password && (
+                  <p
+                    id="password-error"
+                    role="alert"
+                    className="mt-2 text-sm text-red-600"
+                  >
+                    {errors.password}
+                  </p>
+                )}
               </div>
 
               {/* MESSAGE */}
-              {message && (
+
+              {errors.general && (
                 <div
-                  role="status"
+                  role="alert"
                   aria-live="polite"
-                  className={`rounded-input px-4 py-3 text-sm ${
-                    messageType === "success"
-                      ? "bg-success-light text-success"
-                      : "bg-danger-light text-danger"
-                  }`}
+                  className="rounded-input border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
                 >
-                  {message}
+                  {errors.general}
                 </div>
               )}
 
               {/* LOGIN BUTTON */}
+
               <button
                 type="submit"
                 disabled={loading}
@@ -348,6 +431,7 @@ function Login() {
             </form>
 
             {/* Footer */}
+
             <p className="mt-7 text-center text-sm text-body">
               Need an account? Contact your administrator.
             </p>

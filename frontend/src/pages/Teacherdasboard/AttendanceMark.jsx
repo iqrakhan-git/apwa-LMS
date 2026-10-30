@@ -1,4 +1,5 @@
 
+import { useMemo, useState } from "react";
 import {
   LayoutDashboard,
   BookOpen,
@@ -18,8 +19,10 @@ import {
   Clock3,
   XCircle,
   Calendar,
+  AlertCircle,
 } from "lucide-react";
 
+// Sidebar menu
 const menuItems = [
   { name: "Dashboard", icon: LayoutDashboard },
   { name: "My Courses", icon: BookOpen },
@@ -34,6 +37,7 @@ const menuItems = [
   { name: "Settings", icon: Settings },
 ];
 
+// Initial student data
 const initialStudents = [
   {
     id: 1,
@@ -79,6 +83,7 @@ const initialStudents = [
   },
 ];
 
+// Attendance status styles
 const statusStyles = {
   Present: "bg-emerald-100 text-emerald-700",
   Absent: "bg-rose-100 text-rose-700",
@@ -86,6 +91,7 @@ const statusStyles = {
   Leave: "bg-blue-100 text-blue-700",
 };
 
+// Attendance status icons
 const statusIcons = {
   Present: CheckCircle2,
   Absent: XCircle,
@@ -93,11 +99,30 @@ const statusIcons = {
   Leave: Calendar,
 };
 
+// Reusable StatusBadge component
+function StatusBadge({ status }) {
+  const Icon = statusIcons[status] || AlertCircle;
+
+  const style =
+    statusStyles[status] || "bg-slate-100 text-slate-600";
+
+  return (
+    <span
+      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${style}`}
+    >
+      <Icon size={12} />
+      {status || "Unknown"}
+    </span>
+  );
+}
+
+// Sidebar component
 function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-30 flex w-56 flex-col bg-gradient-to-b from-emerald-900 to-teal-950 text-white">
       <div className="flex h-16 items-center gap-2 border-b border-white/10 px-4">
         <GraduationCap size={28} />
+
         <div>
           <h1 className="text-base font-bold">TeachHub</h1>
           <p className="text-[10px] text-emerald-200">
@@ -110,6 +135,7 @@ function Sidebar() {
         {menuItems.map(({ name, icon: Icon }) => (
           <button
             key={name}
+            type="button"
             onClick={() => {
               if (name !== "Attendance") {
                 alert(`${name} page selected`);
@@ -127,7 +153,11 @@ function Sidebar() {
         ))}
       </nav>
 
-      <button className="flex items-center gap-3 border-t border-white/10 px-6 py-4 text-sm hover:bg-white/10">
+      <button
+        type="button"
+        onClick={() => alert("Logout clicked")}
+        className="flex items-center gap-3 border-t border-white/10 px-6 py-4 text-sm hover:bg-white/10"
+      >
         <LogOut size={17} />
         Logout
       </button>
@@ -135,34 +165,45 @@ function Sidebar() {
   );
 }
 
+// Navbar component
 function Navbar() {
   return (
     <header className="fixed left-56 right-0 top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-7 backdrop-blur">
       <div className="flex w-72 items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
         <Search size={16} className="text-slate-400" />
+
         <input
+          type="text"
           placeholder="Search anything..."
           className="w-full bg-transparent text-sm outline-none"
         />
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="relative text-slate-500">
+        <button
+          type="button"
+          aria-label="Notifications"
+          className="relative text-slate-500"
+        >
           <Bell size={18} />
+
           <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500" />
         </button>
 
         <div className="flex items-center gap-2">
           <img
             src="https://i.pravatar.cc/100?img=47"
-            alt="Teacher"
+            alt="Teacher profile"
             className="h-9 w-9 rounded-full object-cover"
           />
+
           <div className="hidden sm:block">
             <p className="text-xs font-semibold text-slate-800">
               Ms. Ayesha Khan
             </p>
-            <p className="text-[10px] text-slate-500">Teacher</p>
+            <p className="text-[10px] text-slate-500">
+              Teacher
+            </p>
           </div>
         </div>
       </div>
@@ -170,31 +211,28 @@ function Navbar() {
   );
 }
 
-function StatusBadge({ status }) {
-  const Icon = statusIcons[status];
-
-  return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${statusStyles[status]}`}
-    >
-      <Icon size={12} />
-      {status}
-    </span>
-  );
-}
-
+// Attendance summary component
 function AttendanceSummary({ students }) {
-  const counts = useMemo(
-    () =>
-      students.reduce(
-        (result, student) => {
+  const counts = useMemo(() => {
+    return students.reduce(
+      (result, student) => {
+        if (Object.prototype.hasOwnProperty.call(
+          result,
+          student.status
+        )) {
           result[student.status] += 1;
-          return result;
-        },
-        { Present: 0, Absent: 0, Late: 0, Leave: 0 }
-      ),
-    [students]
-  );
+        }
+
+        return result;
+      },
+      {
+        Present: 0,
+        Absent: 0,
+        Late: 0,
+        Leave: 0,
+      }
+    );
+  }, [students]);
 
   const total = students.length;
 
@@ -214,7 +252,10 @@ function AttendanceSummary({ students }) {
   const gradient = segments
     .map((segment) => {
       const start = cumulative;
-      cumulative += total ? (counts[segment.name] / total) * 100 : 0;
+
+      cumulative += total
+        ? (counts[segment.name] / total) * 100
+        : 0;
 
       return `${segment.color} ${start}% ${cumulative}%`;
     })
@@ -239,6 +280,7 @@ function AttendanceSummary({ students }) {
             <span className="text-2xl font-bold text-slate-800">
               {attendanceRate}%
             </span>
+
             <span className="text-[10px] text-slate-500">
               Attendance
             </span>
@@ -257,8 +299,10 @@ function AttendanceSummary({ students }) {
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: segment.color }}
               />
+
               {segment.name}
             </div>
+
             <span className="font-semibold text-slate-700">
               {counts[segment.name]}
             </span>
@@ -268,19 +312,36 @@ function AttendanceSummary({ students }) {
 
       <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 text-xs">
         <span className="text-slate-500">Total Students</span>
-        <span className="font-bold text-slate-800">{total}</span>
+
+        <span className="font-bold text-slate-800">
+          {total}
+        </span>
       </div>
     </section>
   );
 }
 
+// Main Attendance page
 export default function Attendance() {
   const [students, setStudents] = useState(initialStudents);
-  const [date, setDate] = useState("2025-04-25");
-  const [selectedClass, setSelectedClass] = useState("CS-101");
+
+  // Set the date to today
+  const [date, setDate] = useState(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  });
+
+  const [selectedClass, setSelectedClass] =
+    useState("CS-101");
+
   const [search, setSearch] = useState("");
   const [saved, setSaved] = useState(false);
 
+  // Filter students by class and name
   const filteredStudents = students.filter((student) => {
     const matchesClass =
       selectedClass === "All Classes" ||
@@ -288,11 +349,12 @@ export default function Attendance() {
 
     const matchesSearch = student.name
       .toLowerCase()
-      .includes(search.toLowerCase());
+      .includes(search.toLowerCase().trim());
 
     return matchesClass && matchesSearch;
   });
 
+  // Update student attendance or remarks
   function updateStudent(id, field, value) {
     setStudents((previous) =>
       previous.map((student) =>
@@ -305,6 +367,7 @@ export default function Attendance() {
     setSaved(false);
   }
 
+  // Mark students in the selected class as present
   function markAllPresent() {
     setStudents((previous) =>
       previous.map((student) =>
@@ -318,14 +381,15 @@ export default function Attendance() {
     setSaved(false);
   }
 
+  // Save current attendance in the UI
   function saveAttendance() {
     setSaved(true);
-    alert(`Attendance updated for ${date}.`);
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-sky-50/60">
       <Sidebar />
+
       <Navbar />
 
       <main className="ml-56 min-h-screen px-7 pb-10 pt-24">
@@ -335,6 +399,7 @@ export default function Attendance() {
             <h2 className="text-2xl font-bold text-slate-900">
               Attendance
             </h2>
+
             <p className="mt-1 text-sm text-slate-500">
               Mark and manage student attendance.
             </p>
@@ -342,7 +407,11 @@ export default function Attendance() {
 
           <div className="flex flex-wrap items-center gap-2">
             <label className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
-              <Calendar size={15} className="text-slate-500" />
+              <Calendar
+                size={15}
+                className="text-slate-500"
+              />
+
               <input
                 type="date"
                 value={date}
@@ -356,16 +425,20 @@ export default function Attendance() {
 
             <select
               value={selectedClass}
-              onChange={(event) => setSelectedClass(event.target.value)}
+              onChange={(event) => {
+                setSelectedClass(event.target.value);
+                setSaved(false);
+              }}
               className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-700 outline-none"
             >
-              <option>All Classes</option>
-              <option>CS-101</option>
-              <option>CS-102</option>
-              <option>CS-103</option>
+              <option value="All Classes">All Classes</option>
+              <option value="CS-101">CS-101</option>
+              <option value="CS-102">CS-102</option>
+              <option value="CS-103">CS-103</option>
             </select>
 
             <button
+              type="button"
               onClick={saveAttendance}
               className="flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-800"
             >
@@ -375,8 +448,12 @@ export default function Attendance() {
           </div>
         </div>
 
+        {/* Save confirmation */}
         {saved && (
-          <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          <div
+            role="status"
+            className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+          >
             Attendance updated for {date}.
           </div>
         )}
@@ -389,12 +466,14 @@ export default function Attendance() {
                 <h3 className="text-sm font-bold text-slate-800">
                   Student Attendance
                 </h3>
+
                 <p className="mt-1 text-xs text-slate-500">
                   Update each student's status and remarks.
                 </p>
               </div>
 
               <button
+                type="button"
                 onClick={markAllPresent}
                 className="rounded-lg border border-emerald-200 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50"
               >
@@ -402,10 +481,16 @@ export default function Attendance() {
               </button>
             </div>
 
+            {/* Search */}
             <div className="border-b border-slate-100 p-3">
               <div className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2">
-                <Search size={15} className="text-slate-400" />
+                <Search
+                  size={15}
+                  className="text-slate-400"
+                />
+
                 <input
+                  type="text"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Search student name..."
@@ -414,6 +499,7 @@ export default function Attendance() {
               </div>
             </div>
 
+            {/* Table */}
             <div className="overflow-x-auto">
               <table className="w-full min-w-[650px] text-left">
                 <thead className="bg-slate-50">
@@ -445,42 +531,54 @@ export default function Attendance() {
                         {index + 1}
                       </td>
 
+                      {/* Student name */}
                       <td className="whitespace-nowrap px-4 py-3">
                         <div className="flex items-center gap-2.5">
                           <img
-                            src={`https://i.pravatar.cc/100?img=${[
-                              47, 12, 44, 68, 49, 32,
-                            ][(student.id - 1) % 6]}`}
+                            src={`https://i.pravatar.cc/100?img=${
+                              [47, 12, 44, 68, 49, 32][
+                                (student.id - 1) % 6
+                              ]
+                            }`}
                             alt={student.name}
                             className="h-8 w-8 rounded-full object-cover"
                           />
+
                           <span className="text-xs font-semibold text-slate-700">
                             {student.name}
                           </span>
                         </div>
                       </td>
 
+                      {/* Attendance status */}
                       <td className="px-4 py-3">
-                        <select
-                          value={student.status}
-                          onChange={(event) =>
-                            updateStudent(
-                              student.id,
-                              "status",
-                              event.target.value
-                            )
-                          }
-                          className={`cursor-pointer rounded-full border-0 px-2 py-1.5 text-xs font-medium outline-none ${statusStyles[student.status]}`}
-                        >
-                          <option value="Present">Present</option>
-                          <option value="Absent">Absent</option>
-                          <option value="Late">Late</option>
-                          <option value="Leave">Leave</option>
-                        </select>
+                        <div className="flex items-center gap-2">
+                          <StatusBadge status={student.status} />
+
+                          <select
+                            aria-label={`Attendance status for ${student.name}`}
+                            value={student.status}
+                            onChange={(event) =>
+                              updateStudent(
+                                student.id,
+                                "status",
+                                event.target.value
+                              )
+                            }
+                            className="max-w-24 rounded-md border border-slate-200 bg-white px-1.5 py-1.5 text-xs text-slate-700 outline-none focus:border-emerald-500"
+                          >
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                            <option value="Late">Late</option>
+                            <option value="Leave">Leave</option>
+                          </select>
+                        </div>
                       </td>
 
+                      {/* Remarks */}
                       <td className="px-4 py-3">
                         <input
+                          type="text"
                           value={student.remarks}
                           onChange={(event) =>
                             updateStudent(
@@ -490,10 +588,12 @@ export default function Attendance() {
                             )
                           }
                           placeholder="Add remark..."
+                          aria-label={`Remarks for ${student.name}`}
                           className="w-24 rounded-md border border-transparent bg-transparent px-2 py-1.5 text-xs text-slate-600 outline-none placeholder:text-slate-400 focus:border-emerald-200 focus:bg-white"
                         />
                       </td>
 
+                      {/* Class */}
                       <td className="px-4 py-3 text-xs text-slate-500">
                         {student.class}
                       </td>
@@ -519,7 +619,7 @@ export default function Attendance() {
             </div>
           </section>
 
-          {/* Summary chart */}
+          {/* Attendance summary */}
           <AttendanceSummary students={filteredStudents} />
         </div>
       </main>

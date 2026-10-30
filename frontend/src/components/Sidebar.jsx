@@ -29,12 +29,16 @@ export default function Sidebar() {
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col bg-[#064e3b] px-4 py-5 text-white">
 
       {/* Logo */}
-      <div className="mb-9 flex items-center gap-3 px-2">
+      <div className="mb-12">
+      <div className="flex items-center gap-3 px-2">
         <GraduationCap size={30} />
 
-        <span className="text-lg font-bold tracking-tight">
-          Student Portal
+        <span className="text-lg font-bold ">
+         APWA Synapse
         </span>
+        
+      </div>
+      <span className="text-sm ml-9 text-gray-400">Intelligent Learning Portal</span>
       </div>
 
       {/* Navigation */}

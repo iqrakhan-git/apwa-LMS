@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import {
   LayoutDashboard,
   BookOpen,
@@ -20,6 +20,7 @@ import {
   MoreVertical,
   X,
 } from "lucide-react";
+import { useState } from "react";
 
 const menuItems = [
   { name: "Dashboard", icon: LayoutDashboard },
@@ -165,7 +166,7 @@ function StatusBadge({ status }) {
   );
 }
 
-export default function Assignments() {
+export default function AssignmentMark() {
   const [assignments, setAssignments] = useState(initialAssignments);
   const [activeFilter, setActiveFilter] = useState("All Assignments");
   const [search, setSearch] = useState("");
