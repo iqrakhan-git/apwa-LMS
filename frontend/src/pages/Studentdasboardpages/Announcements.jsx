@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+
 import {
   Bell,
   Search,
@@ -104,13 +105,16 @@ function getCategoryIcon(category) {
 function getCategoryStyle(category) {
   switch (category) {
     case "Examination":
-      return "bg-purple-50 text-purple-700";
+      return "bg-primary/10 text-primary";
+
     case "Academic":
-      return "bg-blue-50 text-blue-700";
+      return "bg-secondary/10 text-secondary";
+
     case "Scholarship":
-      return "bg-amber-50 text-amber-700";
+      return "bg-accent/15 text-heading";
+
     default:
-      return "bg-green-50 text-green-800";
+      return "bg-primary/5 text-heading";
   }
 }
 
@@ -118,6 +122,7 @@ export default function Announcements() {
   const [announcements, setAnnouncements] = useState(
     initialAnnouncements
   );
+
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
@@ -126,6 +131,10 @@ export default function Announcements() {
 
   const unreadCount = announcements.filter(
     (item) => item.unread
+  ).length;
+
+  const pinnedCount = announcements.filter(
+    (item) => item.pinned
   ).length;
 
   const filteredAnnouncements = useMemo(() => {
@@ -169,7 +178,9 @@ export default function Announcements() {
   const markAsRead = (id) => {
     setAnnouncements((previous) =>
       previous.map((item) =>
-        item.id === id ? { ...item, unread: false } : item
+        item.id === id
+          ? { ...item, unread: false }
+          : item
       )
     );
 
@@ -187,6 +198,12 @@ export default function Announcements() {
         unread: false,
       }))
     );
+
+    setSelectedAnnouncement((previous) =>
+      previous
+        ? { ...previous, unread: false }
+        : previous
+    );
   };
 
   const openAnnouncement = (item) => {
@@ -194,8 +211,14 @@ export default function Announcements() {
     markAsRead(item.id);
   };
 
+  const clearFilters = () => {
+    setSearch("");
+    setActiveCategory("All");
+    setShowUnreadOnly(false);
+  };
+
   return (
-    <div className="min-h-screen ml-70 bg-[#f6f8f6] md:flex">
+    <div className="ml-64 min-h-screen bg-background text-heading md:flex">
       <Sidebar />
 
       <div className="min-w-0 flex-1">
@@ -205,23 +228,23 @@ export default function Announcements() {
           {/* Page Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="mb-2 text-sm text-gray-500">
+              <p className="mb-2 text-sm text-muted">
                 Student Portal / Communication
               </p>
 
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-2xl font-bold text-heading sm:text-3xl">
                   Announcements
                 </h1>
 
                 {unreadCount > 0 && (
-                  <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                     {unreadCount} New
                   </span>
                 )}
               </div>
 
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-muted">
                 Stay updated with the latest university news and notices.
               </p>
             </div>
@@ -229,7 +252,7 @@ export default function Announcements() {
             <button
               onClick={markAllAsRead}
               disabled={unreadCount === 0}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:border-green-700 hover:text-green-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-heading transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               <CircleCheck size={18} />
               Mark all as read
@@ -238,51 +261,64 @@ export default function Announcements() {
 
           {/* Overview Cards */}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-            <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <div className="rounded-xl bg-green-50 p-3 text-green-800">
+            {/* Total Announcements */}
+            <div className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="rounded-xl bg-primary/10 p-3 text-primary">
                 <Megaphone size={24} />
               </div>
+
               <div>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted">
                   Total Announcements
                 </p>
-                <h2 className="mt-1 text-2xl font-bold text-gray-800">
+
+                <h2 className="mt-1 text-2xl font-bold text-heading">
                   {announcements.length}
                 </h2>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <div className="rounded-xl bg-amber-50 p-3 text-amber-700">
+            {/* Unread Notices */}
+            <div className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="rounded-xl bg-secondary/10 p-3 text-secondary">
                 <Bell size={24} />
               </div>
+
               <div>
-                <p className="text-sm text-gray-500">Unread Notices</p>
-                <h2 className="mt-1 text-2xl font-bold text-gray-800">
+                <p className="text-sm text-muted">
+                  Unread Notices
+                </p>
+
+                <h2 className="mt-1 text-2xl font-bold text-heading">
                   {unreadCount}
                 </h2>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <div className="rounded-xl bg-purple-50 p-3 text-purple-700">
+            {/* Pinned Notices */}
+            <div className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="rounded-xl bg-accent/15 p-3 text-heading">
                 <Pin size={24} />
               </div>
+
               <div>
-                <p className="text-sm text-gray-500">Pinned Notices</p>
-                <h2 className="mt-1 text-2xl font-bold text-gray-800">
-                  {announcements.filter((item) => item.pinned).length}
+                <p className="text-sm text-muted">
+                  Pinned Notices
+                </p>
+
+                <h2 className="mt-1 text-2xl font-bold text-heading">
+                  {pinnedCount}
                 </h2>
               </div>
             </div>
           </div>
 
           {/* Search and Filters */}
-          <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <section className="rounded-2xl border border-border bg-card p-5 shadow-sm">
             <div className="relative mb-5">
               <Search
                 size={19}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-muted"
               />
 
               <input
@@ -290,7 +326,7 @@ export default function Announcements() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search announcements..."
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3.5 pl-11 pr-4 text-sm outline-none transition focus:border-green-700 focus:bg-white"
+                className="w-full rounded-xl border border-border bg-background py-3.5 pl-11 pr-4 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
               />
             </div>
 
@@ -301,8 +337,8 @@ export default function Announcements() {
                   onClick={() => setActiveCategory(category)}
                   className={`rounded-xl px-4 py-2.5 text-sm font-medium transition ${
                     activeCategory === category
-                      ? "bg-[#145c3b] text-white shadow-sm"
-                      : "bg-gray-50 text-gray-600 hover:bg-green-50 hover:text-green-800"
+                      ? "bg-primary text-white shadow-sm"
+                      : "bg-background text-muted hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
                   {category}
@@ -310,11 +346,14 @@ export default function Announcements() {
               ))}
 
               <button
-                onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+                onClick={() =>
+                  setShowUnreadOnly((previous) => !previous)
+                }
+                aria-pressed={showUnreadOnly}
                 className={`rounded-xl px-4 py-2.5 text-sm font-medium transition ${
                   showUnreadOnly
-                    ? "bg-amber-100 text-amber-800"
-                    : "bg-gray-50 text-gray-600 hover:bg-amber-50"
+                    ? "bg-primary/10 text-primary ring-1 ring-primary/20"
+                    : "bg-background text-muted hover:bg-primary/10 hover:text-primary"
                 }`}
               >
                 Unread only
@@ -324,30 +363,33 @@ export default function Announcements() {
 
           {/* Announcement List */}
           <section className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-800">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-bold text-heading">
                 Latest Notices
               </h2>
 
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-muted">
                 {filteredAnnouncements.length} results
               </span>
             </div>
 
             {filteredAnnouncements.length > 0 ? (
               filteredAnnouncements.map((item) => {
-                const CategoryIcon = getCategoryIcon(item.category);
+                const CategoryIcon = getCategoryIcon(
+                  item.category
+                );
 
                 return (
                   <article
                     key={item.id}
-                    className={`rounded-2xl border bg-white p-5 shadow-sm transition hover:shadow-md sm:p-6 ${
+                    className={`rounded-2xl border bg-card p-5 shadow-sm transition hover:shadow-md sm:p-6 ${
                       item.unread
-                        ? "border-l-4 border-l-[#145c3b] border-y-gray-100 border-r-gray-100"
-                        : "border-gray-100"
+                        ? "border-y-border border-r-border border-l-4 border-l-primary"
+                        : "border-border"
                     }`}
                   >
                     <div className="flex items-start gap-4">
+                      {/* Category Icon */}
                       <div
                         className={`hidden shrink-0 rounded-xl p-3 sm:block ${getCategoryStyle(
                           item.category
@@ -357,6 +399,7 @@ export default function Announcements() {
                       </div>
 
                       <div className="min-w-0 flex-1">
+                        {/* Badges */}
                         <div className="mb-3 flex flex-wrap items-center gap-2">
                           <span
                             className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${getCategoryStyle(
@@ -367,36 +410,39 @@ export default function Announcements() {
                           </span>
 
                           {item.priority === "Important" && (
-                            <span className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700">
+                            <span className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-heading">
                               Important
                             </span>
                           )}
 
                           {item.pinned && (
-                            <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-500">
+                            <span className="inline-flex items-center gap-1 text-xs font-medium text-muted">
                               <Pin size={13} />
                               Pinned
                             </span>
                           )}
 
                           {item.unread && (
-                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-800">
-                              <span className="h-2 w-2 rounded-full bg-green-600" />
+                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                              <span className="h-2 w-2 rounded-full bg-primary" />
                               New
                             </span>
                           )}
                         </div>
 
-                        <h3 className="text-base font-bold text-gray-800 sm:text-lg">
+                        {/* Title */}
+                        <h3 className="text-base font-bold text-heading sm:text-lg">
                           {item.title}
                         </h3>
 
-                        <p className="mt-2 text-sm leading-6 text-gray-500">
+                        {/* Description */}
+                        <p className="mt-2 text-sm leading-6 text-muted">
                           {item.description}
                         </p>
 
-                        <div className="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400">
+                        {/* Date and Read Details */}
+                        <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex flex-wrap items-center gap-4 text-xs text-muted">
                             <span className="inline-flex items-center gap-1.5">
                               <CalendarDays size={15} />
                               {item.date}
@@ -410,7 +456,7 @@ export default function Announcements() {
 
                           <button
                             onClick={() => openAnnouncement(item)}
-                            className="inline-flex items-center gap-2 self-start text-sm font-semibold text-[#145c3b] hover:text-green-900 sm:self-auto"
+                            className="inline-flex items-center gap-2 self-start text-sm font-semibold text-primary transition hover:text-primary-dark sm:self-auto"
                           >
                             Read details
                             <ArrowRight size={16} />
@@ -422,24 +468,24 @@ export default function Announcements() {
                 );
               })
             ) : (
-              <div className="rounded-2xl border border-gray-100 bg-white px-5 py-14 text-center shadow-sm">
+              /* Empty State */
+              <div className="rounded-2xl border border-border bg-card px-5 py-14 text-center shadow-sm">
                 <Bell
                   size={38}
-                  className="mx-auto mb-4 text-gray-300"
+                  className="mx-auto mb-4 text-primary/40"
                 />
-                <h3 className="font-semibold text-gray-800">
+
+                <h3 className="font-semibold text-heading">
                   No announcements found
                 </h3>
-                <p className="mt-2 text-sm text-gray-500">
+
+                <p className="mt-2 text-sm text-muted">
                   Try another category or search term.
                 </p>
+
                 <button
-                  onClick={() => {
-                    setSearch("");
-                    setActiveCategory("All");
-                    setShowUnreadOnly(false);
-                  }}
-                  className="mt-4 text-sm font-semibold text-green-800 hover:underline"
+                  onClick={clearFilters}
+                  className="mt-4 text-sm font-semibold text-primary transition hover:text-primary-dark hover:underline"
                 >
                   Clear filters
                 </button>
@@ -447,7 +493,8 @@ export default function Announcements() {
             )}
           </section>
 
-          <p className="pb-2 text-center text-xs text-gray-400">
+          {/* Footer */}
+          <p className="pb-2 text-center text-xs text-muted">
             Student Portal · University Announcements
           </p>
         </main>
@@ -456,16 +503,17 @@ export default function Announcements() {
       {/* Announcement Details Modal */}
       {selectedAnnouncement && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px]"
           onClick={() => setSelectedAnnouncement(null)}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="announcement-title"
-            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
+            className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 text-heading shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Modal Header */}
             <div className="mb-5 flex items-start justify-between gap-4">
               <div
                 className={`rounded-xl p-3 ${getCategoryStyle(
@@ -476,6 +524,7 @@ export default function Announcements() {
                   const Icon = getCategoryIcon(
                     selectedAnnouncement.category
                   );
+
                   return <Icon size={24} />;
                 })()}
               </div>
@@ -483,12 +532,13 @@ export default function Announcements() {
               <button
                 onClick={() => setSelectedAnnouncement(null)}
                 aria-label="Close announcement details"
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                className="rounded-lg p-2 text-muted transition hover:bg-primary/10 hover:text-primary"
               >
                 <X size={20} />
               </button>
             </div>
 
+            {/* Category */}
             <span
               className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${getCategoryStyle(
                 selectedAnnouncement.category
@@ -497,14 +547,16 @@ export default function Announcements() {
               {selectedAnnouncement.category}
             </span>
 
+            {/* Announcement Title */}
             <h2
               id="announcement-title"
-              className="mt-4 text-xl font-bold text-gray-800"
+              className="mt-4 text-xl font-bold text-heading"
             >
               {selectedAnnouncement.title}
             </h2>
 
-            <div className="mt-3 flex flex-wrap gap-4 text-xs text-gray-400">
+            {/* Date and Time */}
+            <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted">
               <span className="inline-flex items-center gap-1.5">
                 <CalendarDays size={15} />
                 {selectedAnnouncement.date}
@@ -516,13 +568,15 @@ export default function Announcements() {
               </span>
             </div>
 
-            <p className="mt-5 text-sm leading-7 text-gray-600">
+            {/* Full Description */}
+            <p className="mt-5 text-sm leading-7 text-muted">
               {selectedAnnouncement.description}
             </p>
 
+            {/* Close Button */}
             <button
               onClick={() => setSelectedAnnouncement(null)}
-              className="mt-7 w-full rounded-xl bg-[#145c3b] px-5 py-3 font-semibold text-white transition hover:bg-[#10492f]"
+              className="mt-7 w-full rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:bg-primary-dark"
             >
               Close
             </button>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
@@ -73,17 +72,17 @@ const semesters = ["Fall 2026", "Spring 2026", "Fall 2025"];
 
 function SummaryCard({ icon: Icon, title, value, subtitle }) {
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <h2 className="mt-3 text-3xl font-bold text-gray-800">
+          <p className="text-sm font-medium text-muted">{title}</p>
+          <h2 className="mt-3 text-3xl font-bold text-heading">
             {value}
           </h2>
-          <p className="mt-2 text-xs text-gray-500">{subtitle}</p>
+          <p className="mt-2 text-xs text-muted">{subtitle}</p>
         </div>
 
-        <div className="rounded-xl bg-green-50 p-3 text-green-800">
+        <div className="rounded-xl bg-primary/10 p-3 text-primary">
           <Icon size={23} />
         </div>
       </div>
@@ -154,7 +153,7 @@ export default function Grades() {
   };
 
   return (
-    <div className="min-h-screen ml-70 bg-[#f6f8f6] md:flex">
+    <div className="min-h-screen ml-63 bg-background md:flex">
       {/* Sidebar */}
       <Sidebar />
 
@@ -167,22 +166,22 @@ export default function Grades() {
           {/* Page Heading */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="mb-2 text-sm text-gray-500">
+              <p className="mb-2 text-sm text-muted">
                 Student Portal / Academic
               </p>
 
-              <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+              <h1 className="text-2xl font-bold text-heading sm:text-3xl">
                 My Grades
               </h1>
 
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-muted">
                 View your academic performance and semester results.
               </p>
             </div>
 
             <button
               onClick={handleExport}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#145c3b] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#10492f]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark"
             >
               <Download size={18} />
               Export Grades
@@ -190,12 +189,12 @@ export default function Grades() {
           </div>
 
           {/* Semester Selector */}
-          <div className="flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="font-semibold text-gray-800">
+              <h2 className="font-semibold text-heading">
                 Academic Overview
               </h2>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-muted">
                 Select a semester to review your grades.
               </p>
             </div>
@@ -204,7 +203,7 @@ export default function Grades() {
               <select
                 value={semester}
                 onChange={(e) => setSemester(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-gray-200 bg-white py-3 pl-4 pr-10 text-sm font-medium text-gray-700 outline-none focus:border-green-700 sm:w-48"
+                className="w-full appearance-none rounded-xl border border-border bg-card py-3 pl-4 pr-10 text-sm font-medium text-heading outline-none focus:border-primary sm:w-48"
               >
                 {semesters.map((item) => (
                   <option key={item} value={item}>
@@ -215,7 +214,7 @@ export default function Grades() {
 
               <ChevronDown
                 size={17}
-                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted"
               />
             </div>
           </div>
@@ -252,7 +251,7 @@ export default function Grades() {
           </div>
 
           {/* Performance Banner */}
-          <div className="relative overflow-hidden rounded-2xl bg-[#145c3b] p-6 text-white sm:p-8">
+          <div className="relative overflow-hidden rounded-2xl bg-sidebar p-6 text-white sm:p-8">
             <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium">
@@ -264,7 +263,7 @@ export default function Grades() {
                   Keep up the great work!
                 </h2>
 
-                <p className="mt-2 max-w-xl text-sm leading-6 text-green-100">
+                <p className="mt-2 max-w-xl text-sm leading-6 text-white/80">
                   Review your subject-wise results and keep working toward
                   your academic goals.
                 </p>
@@ -272,7 +271,7 @@ export default function Grades() {
 
               <div className="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-2xl border border-white/20 bg-white/10">
                 <span className="text-3xl font-bold">A</span>
-                <span className="text-xs text-green-100">
+                <span className="text-xs text-white/80">
                   Grade level
                 </span>
               </div>
@@ -283,13 +282,13 @@ export default function Grades() {
           </div>
 
           {/* Grades Table */}
-          <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-            <div className="flex flex-col gap-4 border-b border-gray-100 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+            <div className="flex flex-col gap-4 border-b border-border p-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-lg font-bold text-gray-800">
+                <h2 className="text-lg font-bold text-heading">
                   Subject-wise Grades
                 </h2>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-muted">
                   Your marks, credits and grade points.
                 </p>
               </div>
@@ -297,21 +296,21 @@ export default function Grades() {
               <div className="relative w-full sm:max-w-xs">
                 <Search
                   size={18}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
                 />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search subject or code..."
-                  className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-green-700"
+                  className="w-full rounded-xl border border-border bg-card py-3 pl-10 pr-4 text-sm text-heading outline-none transition focus:border-primary"
                 />
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full min-w-[850px] text-left text-sm">
-                <thead className="bg-[#f5f8f5] text-xs uppercase tracking-wide text-gray-500">
+                <thead className="bg-primary/5 text-xs uppercase tracking-wide text-muted">
                   <tr>
                     <th className="px-5 py-4 font-semibold">Course</th>
                     <th className="px-5 py-4 font-semibold">Subject Name</th>
@@ -331,40 +330,40 @@ export default function Grades() {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-border">
                   {filteredGrades.map((item) => (
                     <tr
                       key={item.code}
-                      className="transition hover:bg-green-50/50"
+                      className="transition hover:bg-primary/5"
                     >
-                      <td className="whitespace-nowrap px-5 py-5 font-semibold text-[#145c3b]">
+                      <td className="whitespace-nowrap px-5 py-5 font-semibold text-primary">
                         {item.code}
                       </td>
 
-                      <td className="px-5 py-5 font-medium text-gray-700">
+                      <td className="px-5 py-5 font-medium text-heading">
                         {item.subject}
                       </td>
 
-                      <td className="px-5 py-5 text-center text-gray-600">
+                      <td className="px-5 py-5 text-center text-muted">
                         {item.credit}
                       </td>
 
-                      <td className="px-5 py-5 text-center font-semibold text-gray-700">
+                      <td className="px-5 py-5 text-center font-semibold text-heading">
                         {item.marks}%
                       </td>
 
                       <td className="px-5 py-5 text-center">
-                        <span className="inline-flex min-w-11 items-center justify-center rounded-lg bg-green-100 px-3 py-1.5 font-bold text-green-800">
+                        <span className="inline-flex min-w-11 items-center justify-center rounded-lg bg-primary/10 px-3 py-1.5 font-bold text-primary">
                           {item.grade}
                         </span>
                       </td>
 
-                      <td className="px-5 py-5 text-center font-medium text-gray-700">
+                      <td className="px-5 py-5 text-center font-medium text-heading">
                         {item.points.toFixed(1)}
                       </td>
 
                       <td className="px-5 py-5">
-                        <span className="whitespace-nowrap rounded-full bg-green-50 px-3 py-1.5 text-xs font-medium text-green-800">
+                        <span className="whitespace-nowrap rounded-full bg-secondary/10 px-3 py-1.5 text-xs font-medium text-secondary">
                           {item.status}
                         </span>
                       </td>
@@ -375,7 +374,7 @@ export default function Grades() {
                     <tr>
                       <td
                         colSpan={7}
-                        className="px-5 py-12 text-center text-gray-500"
+                        className="px-5 py-12 text-center text-muted"
                       >
                         No subjects found. Try another search.
                       </td>
@@ -385,13 +384,13 @@ export default function Grades() {
               </table>
             </div>
 
-            <div className="flex flex-col gap-2 border-t border-gray-100 px-5 py-4 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-2 border-t border-border px-5 py-4 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
               <p>
                 Showing {filteredGrades.length} of {gradesData.length} subjects
               </p>
               <p>
                 Total displayed credits:{" "}
-                <span className="font-semibold text-gray-700">
+                <span className="font-semibold text-heading">
                   {totalCredits}
                 </span>
               </p>
@@ -399,7 +398,7 @@ export default function Grades() {
           </section>
 
           {/* Footer */}
-          <p className="pb-2 text-center text-xs text-gray-400">
+          <p className="pb-2 text-center text-xs text-muted">
             Student Portal · Academic Records
           </p>
         </main>

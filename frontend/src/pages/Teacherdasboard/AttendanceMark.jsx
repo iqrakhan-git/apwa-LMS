@@ -1,18 +1,6 @@
-
 import { useMemo, useState } from "react";
 import {
-  LayoutDashboard,
-  BookOpen,
-  Users,
-  CalendarCheck,
-  ClipboardList,
-  GraduationCap,
-  Megaphone,
-  MessageSquare,
-  CalendarDays,
-  UserRound,
-  Settings,
-  LogOut,
+ 
   Search,
   Bell,
   CheckCircle2,
@@ -21,21 +9,10 @@ import {
   Calendar,
   AlertCircle,
 } from "lucide-react";
+import Sidebar2 from "../../components/Sidebar2";
 
 // Sidebar menu
-const menuItems = [
-  { name: "Dashboard", icon: LayoutDashboard },
-  { name: "My Courses", icon: BookOpen },
-  { name: "Students", icon: Users },
-  { name: "Attendance", icon: CalendarCheck },
-  { name: "Assignments", icon: ClipboardList },
-  { name: "Grades", icon: GraduationCap },
-  { name: "Announcements", icon: Megaphone },
-  { name: "Messages", icon: MessageSquare },
-  { name: "Schedule", icon: CalendarDays },
-  { name: "Profile", icon: UserRound },
-  { name: "Settings", icon: Settings },
-];
+
 
 // Initial student data
 const initialStudents = [
@@ -85,10 +62,10 @@ const initialStudents = [
 
 // Attendance status styles
 const statusStyles = {
-  Present: "bg-emerald-100 text-emerald-700",
-  Absent: "bg-rose-100 text-rose-700",
-  Late: "bg-amber-100 text-amber-700",
-  Leave: "bg-blue-100 text-blue-700",
+  Present: "bg-primary/10 text-primary",
+  Absent: "bg-primary-dark/10 text-primary-dark",
+  Late: "bg-secondary/10 text-secondary",
+  Leave: "bg-accent/20 text-primary-dark",
 };
 
 // Attendance status icons
@@ -104,7 +81,7 @@ function StatusBadge({ status }) {
   const Icon = statusIcons[status] || AlertCircle;
 
   const style =
-    statusStyles[status] || "bg-slate-100 text-slate-600";
+    statusStyles[status] || "bg-primary/10 text-muted";
 
   return (
     <span
@@ -117,65 +94,19 @@ function StatusBadge({ status }) {
 }
 
 // Sidebar component
-function Sidebar() {
-  return (
-    <aside className="fixed inset-y-0 left-0 z-30 flex w-56 flex-col bg-gradient-to-b from-emerald-900 to-teal-950 text-white">
-      <div className="flex h-16 items-center gap-2 border-b border-white/10 px-4">
-        <GraduationCap size={28} />
 
-        <div>
-          <h1 className="text-base font-bold">TeachHub</h1>
-          <p className="text-[10px] text-emerald-200">
-            Teacher Portal
-          </p>
-        </div>
-      </div>
-
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        {menuItems.map(({ name, icon: Icon }) => (
-          <button
-            key={name}
-            type="button"
-            onClick={() => {
-              if (name !== "Attendance") {
-                alert(`${name} page selected`);
-              }
-            }}
-            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
-              name === "Attendance"
-                ? "bg-emerald-700 text-white shadow"
-                : "text-emerald-50/80 hover:bg-white/10"
-            }`}
-          >
-            <Icon size={17} />
-            {name}
-          </button>
-        ))}
-      </nav>
-
-      <button
-        type="button"
-        onClick={() => alert("Logout clicked")}
-        className="flex items-center gap-3 border-t border-white/10 px-6 py-4 text-sm hover:bg-white/10"
-      >
-        <LogOut size={17} />
-        Logout
-      </button>
-    </aside>
-  );
-}
 
 // Navbar component
 function Navbar() {
   return (
-    <header className="fixed left-56 right-0 top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-7 backdrop-blur">
-      <div className="flex w-72 items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
-        <Search size={16} className="text-slate-400" />
+    <header className="fixed left-56 right-0 top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-card/95 px-7 backdrop-blur">
+      <div className="flex w-72 items-center gap-2 rounded-lg bg-background px-3 py-2">
+        <Search size={16} className="text-muted" />
 
         <input
           type="text"
           placeholder="Search anything..."
-          className="w-full bg-transparent text-sm outline-none"
+          className="w-full bg-transparent text-sm text-heading outline-none"
         />
       </div>
 
@@ -183,11 +114,11 @@ function Navbar() {
         <button
           type="button"
           aria-label="Notifications"
-          className="relative text-slate-500"
+          className="relative text-muted"
         >
           <Bell size={18} />
 
-          <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500" />
+          <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-primary" />
         </button>
 
         <div className="flex items-center gap-2">
@@ -198,10 +129,10 @@ function Navbar() {
           />
 
           <div className="hidden sm:block">
-            <p className="text-xs font-semibold text-slate-800">
+            <p className="text-xs font-semibold text-heading">
               Ms. Ayesha Khan
             </p>
-            <p className="text-[10px] text-slate-500">
+            <p className="text-[10px] text-muted">
               Teacher
             </p>
           </div>
@@ -241,10 +172,10 @@ function AttendanceSummary({ students }) {
     : 0;
 
   const segments = [
-    { name: "Present", color: "#059669" },
-    { name: "Absent", color: "#f87171" },
-    { name: "Late", color: "#fbbf24" },
-    { name: "Leave", color: "#3b82f6" },
+    { name: "Present", color: "#7C3AED" },
+    { name: "Absent", color: "#5B21B6" },
+    { name: "Late", color: "#9333EA" },
+    { name: "Leave", color: "#C084FC" },
   ];
 
   let cumulative = 0;
@@ -262,8 +193,8 @@ function AttendanceSummary({ students }) {
     .join(", ");
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h3 className="text-sm font-bold text-slate-800">
+    <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
+      <h3 className="text-sm font-bold text-heading">
         Attendance Summary
       </h3>
 
@@ -273,15 +204,15 @@ function AttendanceSummary({ students }) {
           style={{
             background: total
               ? `conic-gradient(${gradient})`
-              : "#e2e8f0",
+              : "#ede9fe",
           }}
         >
-          <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white">
-            <span className="text-2xl font-bold text-slate-800">
+          <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-card">
+            <span className="text-2xl font-bold text-heading">
               {attendanceRate}%
             </span>
 
-            <span className="text-[10px] text-slate-500">
+            <span className="text-[10px] text-muted">
               Attendance
             </span>
           </div>
@@ -294,7 +225,7 @@ function AttendanceSummary({ students }) {
             key={segment.name}
             className="flex items-center justify-between gap-2 text-xs"
           >
-            <div className="flex items-center gap-2 text-slate-600">
+            <div className="flex items-center gap-2 text-muted">
               <span
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: segment.color }}
@@ -303,17 +234,17 @@ function AttendanceSummary({ students }) {
               {segment.name}
             </div>
 
-            <span className="font-semibold text-slate-700">
+            <span className="font-semibold text-heading">
               {counts[segment.name]}
             </span>
           </div>
         ))}
       </div>
 
-      <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 text-xs">
-        <span className="text-slate-500">Total Students</span>
+      <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-xs">
+        <span className="text-muted">Total Students</span>
 
-        <span className="font-bold text-slate-800">
+        <span className="font-bold text-heading">
           {total}
         </span>
       </div>
@@ -322,7 +253,7 @@ function AttendanceSummary({ students }) {
 }
 
 // Main Attendance page
-export default function Attendance() {
+export default function AttendanceMark() {
   const [students, setStudents] = useState(initialStudents);
 
   // Set the date to today
@@ -387,29 +318,30 @@ export default function Attendance() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-sky-50/60">
-      <Sidebar />
+    <div className="min-h-screen ">
+      <Sidebar2 />
 
-      <Navbar />
+       <Navbar />
 
-      <main className="ml-56 min-h-screen px-7 pb-10 pt-24">
+      <main className="ml-62 min-h-screen px-7 pb-10 pt-24 bg-background ">
+       
         {/* Heading and controls */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-heading">
               Attendance
             </h2>
 
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-muted">
               Mark and manage student attendance.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <label className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+            <label className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
               <Calendar
                 size={15}
-                className="text-slate-500"
+                className="text-muted"
               />
 
               <input
@@ -419,7 +351,7 @@ export default function Attendance() {
                   setDate(event.target.value);
                   setSaved(false);
                 }}
-                className="w-32 bg-transparent text-xs text-slate-700 outline-none"
+                className="w-32 bg-transparent text-xs text-heading outline-none"
               />
             </label>
 
@@ -429,7 +361,7 @@ export default function Attendance() {
                 setSelectedClass(event.target.value);
                 setSaved(false);
               }}
-              className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-700 outline-none"
+              className="rounded-lg border border-border bg-card px-3 py-2.5 text-xs text-heading outline-none"
             >
               <option value="All Classes">All Classes</option>
               <option value="CS-101">CS-101</option>
@@ -440,7 +372,7 @@ export default function Attendance() {
             <button
               type="button"
               onClick={saveAttendance}
-              className="flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+              className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-primary-dark"
             >
               <CheckCircle2 size={15} />
               Save Attendance
@@ -452,7 +384,7 @@ export default function Attendance() {
         {saved && (
           <div
             role="status"
-            className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+            className="mb-4 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-primary"
           >
             Attendance updated for {date}.
           </div>
@@ -460,14 +392,14 @@ export default function Attendance() {
 
         <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_260px]">
           {/* Attendance table */}
-          <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4">
+          <section className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
               <div>
-                <h3 className="text-sm font-bold text-slate-800">
+                <h3 className="text-sm font-bold text-heading">
                   Student Attendance
                 </h3>
 
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-muted">
                   Update each student's status and remarks.
                 </p>
               </div>
@@ -475,18 +407,18 @@ export default function Attendance() {
               <button
                 type="button"
                 onClick={markAllPresent}
-                className="rounded-lg border border-emerald-200 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50"
+                className="rounded-lg border border-primary/20 px-3 py-2 text-xs font-medium text-primary transition hover:bg-primary/5"
               >
                 Mark All Present
               </button>
             </div>
 
             {/* Search */}
-            <div className="border-b border-slate-100 p-3">
-              <div className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2">
+            <div className="border-b border-border p-3">
+              <div className="flex items-center gap-2 rounded-lg border border-border px-3 py-2">
                 <Search
                   size={15}
-                  className="text-slate-400"
+                  className="text-muted"
                 />
 
                 <input
@@ -494,7 +426,7 @@ export default function Attendance() {
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Search student name..."
-                  className="w-full text-xs outline-none"
+                  className="w-full bg-transparent text-xs text-heading outline-none"
                 />
               </div>
             </div>
@@ -502,7 +434,7 @@ export default function Attendance() {
             {/* Table */}
             <div className="overflow-x-auto">
               <table className="w-full min-w-[650px] text-left">
-                <thead className="bg-slate-50">
+                <thead className="bg-primary/5">
                   <tr>
                     {[
                       "#",
@@ -513,7 +445,7 @@ export default function Attendance() {
                     ].map((heading) => (
                       <th
                         key={heading}
-                        className="px-4 py-3 text-xs font-semibold text-slate-500"
+                        className="px-4 py-3 text-xs font-semibold text-muted"
                       >
                         {heading}
                       </th>
@@ -521,13 +453,13 @@ export default function Attendance() {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-border">
                   {filteredStudents.map((student, index) => (
                     <tr
                       key={student.id}
-                      className="transition hover:bg-emerald-50/40"
+                      className="transition hover:bg-primary/5"
                     >
-                      <td className="px-4 py-3 text-xs text-slate-500">
+                      <td className="px-4 py-3 text-xs text-muted">
                         {index + 1}
                       </td>
 
@@ -544,7 +476,7 @@ export default function Attendance() {
                             className="h-8 w-8 rounded-full object-cover"
                           />
 
-                          <span className="text-xs font-semibold text-slate-700">
+                          <span className="text-xs font-semibold text-heading">
                             {student.name}
                           </span>
                         </div>
@@ -565,7 +497,7 @@ export default function Attendance() {
                                 event.target.value
                               )
                             }
-                            className="max-w-24 rounded-md border border-slate-200 bg-white px-1.5 py-1.5 text-xs text-slate-700 outline-none focus:border-emerald-500"
+                            className="max-w-24 rounded-md border border-border bg-card px-1.5 py-1.5 text-xs text-heading outline-none focus:border-primary"
                           >
                             <option value="Present">Present</option>
                             <option value="Absent">Absent</option>
@@ -589,12 +521,12 @@ export default function Attendance() {
                           }
                           placeholder="Add remark..."
                           aria-label={`Remarks for ${student.name}`}
-                          className="w-24 rounded-md border border-transparent bg-transparent px-2 py-1.5 text-xs text-slate-600 outline-none placeholder:text-slate-400 focus:border-emerald-200 focus:bg-white"
+                          className="w-24 rounded-md border border-transparent bg-transparent px-2 py-1.5 text-xs text-heading outline-none placeholder:text-muted focus:border-primary/30 focus:bg-card"
                         />
                       </td>
 
                       {/* Class */}
-                      <td className="px-4 py-3 text-xs text-slate-500">
+                      <td className="px-4 py-3 text-xs text-muted">
                         {student.class}
                       </td>
                     </tr>
@@ -604,7 +536,7 @@ export default function Attendance() {
                     <tr>
                       <td
                         colSpan={5}
-                        className="px-4 py-10 text-center text-sm text-slate-500"
+                        className="px-4 py-10 text-center text-sm text-muted"
                       >
                         No students found.
                       </td>
@@ -614,7 +546,7 @@ export default function Attendance() {
               </table>
             </div>
 
-            <div className="border-t border-slate-100 px-4 py-3 text-xs text-slate-500">
+            <div className="border-t border-border px-4 py-3 text-xs text-muted">
               Showing {filteredStudents.length} students
             </div>
           </section>

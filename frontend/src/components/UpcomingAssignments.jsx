@@ -1,4 +1,3 @@
-
 import { ClipboardList, ArrowUpRight } from "lucide-react";
 
 const assignments = [
@@ -7,46 +6,46 @@ const assignments = [
     subject: "HTML, CSS & React",
     due: "Due: 28 Oct 2026",
     priority: "High",
-    color: "bg-red-50 text-red-600",
-    badge: "bg-red-50 text-red-600",
+    color: "bg-primary/10 text-primary",
+    badge: "bg-primary/10 text-primary",
   },
   {
     title: "Database Project",
     subject: "Database Management",
     due: "Due: 30 Oct 2026",
     priority: "Medium",
-    color: "bg-amber-50 text-amber-600",
-    badge: "bg-amber-50 text-amber-700",
+    color: "bg-primary-dark/10 text-primary-dark",
+    badge: "bg-primary-dark/10 text-primary-dark",
   },
   {
     title: "UI/UX Design Task",
     subject: "Design Fundamentals",
     due: "Due: 02 Nov 2026",
     priority: "Low",
-    color: "bg-emerald-50 text-emerald-600",
-    badge: "bg-emerald-50 text-emerald-700",
+    color: "bg-secondary/10 text-secondary",
+    badge: "bg-secondary/10 text-secondary",
   },
 ];
 
 export default function UpcomingAssignments() {
   return (
-    <section className="mb-7 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+    <section className="mb-7 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
 
       {/* Heading */}
       <div className="mb-5 flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-[#173d33]">
+          <h2 className="text-lg font-bold text-heading">
             Upcoming Assignments
           </h2>
 
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-muted">
             Keep track of your upcoming deadlines.
           </p>
         </div>
 
         <button
           type="button"
-          className="flex shrink-0 items-center gap-1 text-sm font-semibold text-emerald-700 transition hover:text-emerald-900"
+          className="flex shrink-0 items-center gap-1 text-sm font-semibold text-primary transition hover:text-primary-dark"
         >
           View All
           <ArrowUpRight size={16} />
@@ -59,7 +58,7 @@ export default function UpcomingAssignments() {
         {assignments.map((assignment) => (
           <div
             key={assignment.title}
-            className="flex flex-col gap-3 rounded-xl border border-gray-100 p-4 transition hover:border-emerald-200 hover:bg-emerald-50/30 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-3 rounded-xl border border-border p-4 transition hover:border-primary/30 hover:bg-primary/5 sm:flex-row sm:items-center sm:justify-between"
           >
             {/* Assignment Details */}
             <div className="flex items-center gap-3">
@@ -71,15 +70,15 @@ export default function UpcomingAssignments() {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-gray-800">
+                <h3 className="text-sm font-semibold text-heading">
                   {assignment.title}
                 </h3>
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-muted">
                   {assignment.subject}
                 </p>
 
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-muted">
                   {assignment.due}
                 </p>
               </div>

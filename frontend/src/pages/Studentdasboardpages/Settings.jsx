@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+
 import {
   UserRound,
   Bell,
@@ -16,6 +17,8 @@ import {
   Eye,
   EyeOff,
   CheckCircle2,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 const initialSettings = {
@@ -36,12 +39,13 @@ const initialSettings = {
 function SectionTitle({ icon: Icon, title, description }) {
   return (
     <div className="mb-6 flex items-start gap-3">
-      <div className="rounded-xl bg-green-50 p-3 text-[#145c3b]">
+      <div className="rounded-xl bg-primary/10 p-3 text-primary">
         <Icon size={21} />
       </div>
+
       <div>
-        <h2 className="text-lg font-bold text-gray-800">{title}</h2>
-        <p className="mt-1 text-sm leading-5 text-gray-500">
+        <h2 className="text-lg font-bold text-heading">{title}</h2>
+        <p className="mt-1 text-sm leading-5 text-muted">
           {description}
         </p>
       </div>
@@ -53,8 +57,8 @@ function Toggle({ checked, onChange, label, description }) {
   return (
     <div className="flex items-center justify-between gap-4 py-4">
       <div>
-        <p className="text-sm font-semibold text-gray-700">{label}</p>
-        <p className="mt-1 text-xs leading-5 text-gray-500">
+        <p className="text-sm font-semibold text-heading">{label}</p>
+        <p className="mt-1 text-xs leading-5 text-muted">
           {description}
         </p>
       </div>
@@ -66,7 +70,7 @@ function Toggle({ checked, onChange, label, description }) {
         aria-label={label}
         onClick={() => onChange(!checked)}
         className={`relative h-6 w-11 shrink-0 rounded-full transition ${
-          checked ? "bg-[#145c3b]" : "bg-gray-300"
+          checked ? "bg-primary" : "bg-border"
         }`}
       >
         <span
@@ -79,54 +83,96 @@ function Toggle({ checked, onChange, label, description }) {
   );
 }
 
-function Field({ label, value, onChange, placeholder, type = "text" }) {
+function Field({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+}) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-gray-700">
+      <span className="mb-2 block text-sm font-medium text-heading">
         {label}
       </span>
+
       <input
         type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-[#145c3b] focus:ring-2 focus:ring-green-100"
+        className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
       />
     </label>
   );
 }
 
 export default function Settings() {
-  const [settings, setSettings] = useState(initialSettings);
+  const [settings, setSettings] = useState(() => ({
+    ...initialSettings,
+    theme:
+      localStorage.getItem("theme") === "dark" ? "Dark" : "Light",
+  }));
+
   const [activeTab, setActiveTab] = useState("Profile");
   const [saved, setSaved] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
 
+  // Apply theme automatically
+  useEffect(() => {
+    const isDark = settings.theme === "Dark";
+
+    document.documentElement.classList.toggle("dark", isDark);
+
+    localStorage.setItem(
+      "theme",
+      isDark ? "dark" : "light"
+    );
+  }, [settings.theme]);
+
+  // Update settings
   const updateSetting = (key, value) => {
-    setSettings((previous) => ({ ...previous, [key]: value }));
+    setSettings((previous) => ({
+      ...previous,
+      [key]: value,
+    }));
+
     setSaved(false);
   };
 
+  // Reset settings
   const resetSettings = () => {
-    setSettings(initialSettings);
+    setSettings({
+      ...initialSettings,
+      theme: "Light",
+    });
+
     setSaved(false);
+    setPassword("");
+    setConfirmPassword("");
+    setPasswordMessage("");
   };
 
+  // Save settings
   const saveSettings = (event) => {
     event.preventDefault();
 
-    // Demo only: persist settings through your backend/API in production.
+    // Demo only: connect your backend/API for permanent profile saving.
     setSaved(true);
   };
 
+  // Change password validation
   const changePassword = (event) => {
     event.preventDefault();
 
     if (password.length < 8) {
-      setPasswordMessage("Password must be at least 8 characters.");
+      setPasswordMessage(
+        "Password must be at least 8 characters."
+      );
       return;
     }
 
@@ -149,30 +195,34 @@ export default function Settings() {
   ];
 
   return (
-    <div className="min-h-screen ml-70 bg-[#f6f8f6] md:flex">
+    <div className="min-h-screen bg-background md:flex">
       <Sidebar />
 
-      <div className="min-w-0 flex-1">
+      <div className="ml-64 min-w-0 flex-1">
         <Navbar />
 
         <main className="mx-auto max-w-[1500px] space-y-7 p-4 sm:p-6 lg:p-8">
+
           {/* Header */}
           <div>
-            <p className="mb-2 text-sm text-gray-500">
+            <p className="mb-2 text-sm text-muted">
               Student Portal / Account
             </p>
-            <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+
+            <h1 className="text-2xl font-bold text-heading sm:text-3xl">
               Settings
             </h1>
-            <p className="mt-2 text-sm text-gray-500">
+
+            <p className="mt-2 text-sm text-muted">
               Manage your account preferences and personal information.
             </p>
           </div>
 
-          {/* Save status */}
+          {/* Save Status */}
           {saved && (
-            <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
+            <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/10 p-4 text-sm text-primary">
               <CheckCircle2 size={20} />
+
               <span>
                 Settings updated in this session. Connect an API to save
                 changes permanently.
@@ -181,10 +231,11 @@ export default function Settings() {
           )}
 
           <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+
             {/* Settings Sidebar */}
-            <aside className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
+            <aside className="rounded-2xl border border-border bg-card p-3 shadow-sm">
               <div className="px-3 pb-4 pt-3">
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">
                   Account Preferences
                 </p>
               </div>
@@ -197,8 +248,8 @@ export default function Settings() {
                     onClick={() => setActiveTab(name)}
                     className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
                       activeTab === name
-                        ? "bg-[#145c3b] text-white shadow-sm"
-                        : "text-gray-600 hover:bg-green-50 hover:text-[#145c3b]"
+                        ? "bg-primary text-white shadow-sm"
+                        : "text-muted hover:bg-primary/10 hover:text-primary"
                     }`}
                   >
                     <Icon size={19} />
@@ -207,12 +258,13 @@ export default function Settings() {
                 ))}
               </nav>
 
-              <div className="mt-5 rounded-xl bg-[#f5f8f5] p-4">
-                <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <LockKeyhole size={17} className="text-[#145c3b]" />
+              <div className="mt-5 rounded-xl bg-primary/5 p-4">
+                <div className="flex items-center gap-2 text-sm font-semibold text-heading">
+                  <LockKeyhole size={17} className="text-primary" />
                   Account Security
                 </div>
-                <p className="mt-2 text-xs leading-5 text-gray-500">
+
+                <p className="mt-2 text-xs leading-5 text-muted">
                   Keep your profile information current and protect your
                   account.
                 </p>
@@ -221,27 +273,31 @@ export default function Settings() {
 
             {/* Settings Content */}
             <form onSubmit={saveSettings} className="space-y-6">
-              {/* Profile */}
+
+              {/* PROFILE */}
               {activeTab === "Profile" && (
-                <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7">
+                <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7">
                   <SectionTitle
                     icon={UserRound}
                     title="Profile Information"
                     description="Update your personal details and contact information."
                   />
 
-                  <div className="mb-7 flex flex-col items-start gap-4 rounded-xl bg-[#f8faf8] p-4 sm:flex-row sm:items-center">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-[#145c3b]">
+                  <div className="mb-7 flex flex-col items-start gap-4 rounded-xl bg-primary/5 p-4 sm:flex-row sm:items-center">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <UserRound size={36} />
                     </div>
+
                     <div>
-                      <p className="font-semibold text-gray-800">
+                      <p className="font-semibold text-heading">
                         Profile Details
                       </p>
-                      <p className="mt-1 text-xs text-gray-500">
+
+                      <p className="mt-1 text-xs text-muted">
                         Your student information is displayed here.
                       </p>
-                      <p className="mt-2 inline-flex items-center gap-2 text-xs font-medium text-gray-400">
+
+                      <p className="mt-2 inline-flex items-center gap-2 text-xs font-medium text-muted">
                         <Camera size={14} />
                         Profile photo upload can be added later.
                       </p>
@@ -301,22 +357,25 @@ export default function Settings() {
                 </section>
               )}
 
-              {/* Notifications */}
+              {/* NOTIFICATIONS */}
               {activeTab === "Notifications" && (
-                <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7">
+                <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7">
                   <SectionTitle
                     icon={Bell}
                     title="Notification Preferences"
                     description="Choose which updates you want to receive."
                   />
 
-                  <div className="divide-y divide-gray-100">
+                  <div className="divide-y divide-border">
                     <Toggle
                       label="Email Notifications"
                       description="Receive important portal updates by email."
                       checked={settings.emailNotifications}
-                      onChange={(v) => updateSetting("emailNotifications", v)}
+                      onChange={(v) =>
+                        updateSetting("emailNotifications", v)
+                      }
                     />
+
                     <Toggle
                       label="Announcements"
                       description="Get notified about university news and notices."
@@ -325,6 +384,7 @@ export default function Settings() {
                         updateSetting("announcementNotifications", v)
                       }
                     />
+
                     <Toggle
                       label="Assignment Reminders"
                       description="Receive reminders about assignments and deadlines."
@@ -333,84 +393,120 @@ export default function Settings() {
                         updateSetting("assignmentNotifications", v)
                       }
                     />
+
                     <Toggle
                       label="Grade Updates"
                       description="Get updates when new grades are published."
                       checked={settings.gradeNotifications}
-                      onChange={(v) => updateSetting("gradeNotifications", v)}
+                      onChange={(v) =>
+                        updateSetting("gradeNotifications", v)
+                      }
                     />
                   </div>
                 </section>
               )}
 
-              {/* Appearance */}
+              {/* APPEARANCE */}
               {activeTab === "Appearance" && (
-                <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7">
+                <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7">
                   <SectionTitle
                     icon={Palette}
                     title="Appearance"
                     description="Choose your preferred portal appearance."
                   />
 
-                  <p className="mb-3 text-sm font-medium text-gray-700">
-                    Color Theme
+                  <p className="mb-4 text-sm font-semibold text-heading">
+                    Select Your Theme
                   </p>
 
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {[
-                      {
-                        name: "Light",
-                        bg: "bg-white",
-                        panel: "bg-gray-100",
-                      },
-                      {
-                        name: "Dark",
-                        bg: "bg-gray-800",
-                        panel: "bg-gray-600",
-                      },
-                    ].map((theme) => (
-                      <button
-                        key={theme.name}
-                        type="button"
-                        onClick={() => updateSetting("theme", theme.name)}
-                        className={`rounded-2xl border-2 p-4 text-left transition ${
-                          settings.theme === theme.name
-                            ? "border-[#145c3b] bg-green-50/50"
-                            : "border-gray-100 hover:border-gray-300"
-                        }`}
-                      >
-                        <div
-                          className={`h-24 rounded-xl border border-gray-200 p-3 ${theme.bg}`}
-                        >
-                          <div className={`h-3 w-1/2 rounded ${theme.panel}`} />
-                          <div className="mt-3 flex gap-2">
-                            <div className={`h-10 w-1/3 rounded ${theme.panel}`} />
-                            <div className={`h-10 flex-1 rounded ${theme.panel}`} />
-                          </div>
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                    {/* Light Mode */}
+                    <button
+                      type="button"
+                      onClick={() => updateSetting("theme", "Light")}
+                      className={`rounded-2xl border-2 p-4 text-left transition ${
+                        settings.theme === "Light"
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/40"
+                      }`}
+                    >
+                      <div className="h-28 overflow-hidden rounded-xl border border-gray-200 bg-white p-3">
+                        <div className="mb-3 h-3 w-1/2 rounded bg-purple-200" />
+
+                        <div className="flex gap-2">
+                          <div className="h-14 w-1/3 rounded bg-purple-100" />
+                          <div className="h-14 flex-1 rounded bg-gray-100" />
                         </div>
-                        <p className="mt-3 font-semibold text-gray-800">
-                          {theme.name}
-                        </p>
-                        <p className="mt-1 text-xs text-gray-500">
-                          {theme.name === "Light"
-                            ? "Clean and bright interface"
-                            : "Dark background appearance"}
-                        </p>
-                      </button>
-                    ))}
+                      </div>
+
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="flex items-center gap-2 font-semibold text-heading">
+                          <Sun size={18} className="text-primary" />
+                          Light Mode
+                        </span>
+
+                        {settings.theme === "Light" && (
+                          <CheckCircle2 size={20} className="text-primary" />
+                        )}
+                      </div>
+
+                      <p className="mt-1 text-xs text-muted">
+                        Clean and bright appearance.
+                      </p>
+                    </button>
+
+                    {/* Dark Mode */}
+                    <button
+                      type="button"
+                      onClick={() => updateSetting("theme", "Dark")}
+                      className={`rounded-2xl border-2 p-4 text-left transition ${
+                        settings.theme === "Dark"
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/40"
+                      }`}
+                    >
+                      <div className="h-28 overflow-hidden rounded-xl border border-gray-700 bg-gray-900 p-3">
+                        <div className="mb-3 h-3 w-1/2 rounded bg-purple-500" />
+
+                        <div className="flex gap-2">
+                          <div className="h-14 w-1/3 rounded bg-gray-700" />
+                          <div className="h-14 flex-1 rounded bg-gray-800" />
+                        </div>
+                      </div>
+
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="flex items-center gap-2 font-semibold text-heading">
+                          <Moon size={18} className="text-primary" />
+                          Dark Mode
+                        </span>
+
+                        {settings.theme === "Dark" && (
+                          <CheckCircle2 size={20} className="text-primary" />
+                        )}
+                      </div>
+
+                      <p className="mt-1 text-xs text-muted">
+                        Comfortable dark appearance.
+                      </p>
+                    </button>
                   </div>
 
-                  <p className="mt-4 rounded-xl bg-amber-50 p-4 text-xs leading-5 text-amber-800">
-                    Theme selection is stored in the form state. Apply it to
-                    the entire portal using a shared theme provider to change
-                    the actual interface.
-                  </p>
+                  <div className="mt-5 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                    <p className="text-sm font-semibold text-heading">
+                      Current Theme: {settings.theme}
+                    </p>
+
+                    <p className="mt-1 text-xs text-muted">
+                      Your selected theme is automatically applied and saved.
+                    </p>
+                  </div>
                 </section>
               )}
 
-              {/* Language */}
+              {/* LANGUAGE */}
               {activeTab === "Language" && (
-                <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7">
+                <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7">
                   <SectionTitle
                     icon={Globe}
                     title="Language Preferences"
@@ -418,29 +514,33 @@ export default function Settings() {
                   />
 
                   <label className="block max-w-lg">
-                    <span className="mb-2 block text-sm font-medium text-gray-700">
+                    <span className="mb-2 block text-sm font-medium text-heading">
                       Portal Language
                     </span>
+
                     <select
                       value={settings.language}
                       onChange={(e) =>
                         updateSetting("language", e.target.value)
                       }
-                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#145c3b]"
+                      className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-heading outline-none focus:border-primary"
                     >
                       <option value="English">English</option>
                       <option value="Urdu">Urdu</option>
+                      <option value="Sindhi">Sindhi</option>
                     </select>
                   </label>
 
-                  <div className="mt-5 rounded-xl bg-[#f5f8f5] p-4">
-                    <p className="text-sm font-semibold text-gray-700">
+                  <div className="mt-5 rounded-xl bg-primary/5 p-4">
+                    <p className="text-sm font-semibold text-heading">
                       Selected Language
                     </p>
-                    <p className="mt-1 text-sm text-gray-500">
+
+                    <p className="mt-1 text-sm text-muted">
                       {settings.language}
                     </p>
-                    <p className="mt-2 text-xs leading-5 text-gray-500">
+
+                    <p className="mt-2 text-xs leading-5 text-muted">
                       A translation system is needed to change the language
                       across all portal pages.
                     </p>
@@ -448,40 +548,41 @@ export default function Settings() {
                 </section>
               )}
 
-              {/* Security */}
+              {/* SECURITY */}
               {activeTab === "Security" && (
                 <>
-                  <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7">
+                  <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7">
                     <SectionTitle
                       icon={ShieldCheck}
                       title="Security Settings"
                       description="Manage your password and account protection."
                     />
 
-                    <div className="mb-6 flex items-start gap-3 rounded-xl bg-green-50 p-4">
+                    <div className="mb-6 flex items-start gap-3 rounded-xl bg-primary/10 p-4">
                       <LockKeyhole
                         size={20}
-                        className="mt-0.5 shrink-0 text-[#145c3b]"
+                        className="mt-0.5 shrink-0 text-primary"
                       />
+
                       <div>
-                        <p className="text-sm font-semibold text-gray-800">
+                        <p className="text-sm font-semibold text-heading">
                           Protect your account
                         </p>
-                        <p className="mt-1 text-xs leading-5 text-gray-600">
+
+                        <p className="mt-1 text-xs leading-5 text-muted">
                           Use a strong, unique password and never share it
                           with anyone.
                         </p>
                       </div>
                     </div>
 
-                    <form
-                      onSubmit={changePassword}
-                      className="space-y-5"
-                    >
+                    {/* Password Form */}
+                    <div className="space-y-5">
                       <label className="block">
-                        <span className="mb-2 block text-sm font-medium text-gray-700">
+                        <span className="mb-2 block text-sm font-medium text-heading">
                           New Password
                         </span>
+
                         <div className="relative">
                           <input
                             type={showPassword ? "text" : "password"}
@@ -489,15 +590,16 @@ export default function Settings() {
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter new password"
                             autoComplete="new-password"
-                            className="w-full rounded-xl border border-gray-200 px-4 py-3 pr-12 text-sm outline-none focus:border-[#145c3b]"
+                            className="w-full rounded-xl border border-border bg-card px-4 py-3 pr-12 text-sm text-heading outline-none focus:border-primary"
                           />
+
                           <button
                             type="button"
                             aria-label={
                               showPassword ? "Hide password" : "Show password"
                             }
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted"
                           >
                             {showPassword ? (
                               <EyeOff size={19} />
@@ -517,24 +619,22 @@ export default function Settings() {
                       />
 
                       {passwordMessage && (
-                        <p
-                          aria-live="polite"
-                          className="text-sm text-gray-600"
-                        >
+                        <p aria-live="polite" className="text-sm text-muted">
                           {passwordMessage}
                         </p>
                       )}
 
                       <button
-                        type="submit"
-                        className="rounded-xl bg-[#145c3b] px-5 py-3 text-sm font-semibold text-white hover:bg-[#10492f]"
+                        type="button"
+                        onClick={changePassword}
+                        className="rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white hover:bg-primary-dark"
                       >
                         Validate Password
                       </button>
-                    </form>
+                    </div>
                   </section>
 
-                  <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-7">
+                  <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7">
                     <SectionTitle
                       icon={Smartphone}
                       title="Two-Factor Authentication"
@@ -556,7 +656,7 @@ export default function Settings() {
                 <button
                   type="button"
                   onClick={resetSettings}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-sm font-semibold text-muted transition hover:bg-primary/5"
                 >
                   <RotateCcw size={17} />
                   Reset
@@ -564,7 +664,7 @@ export default function Settings() {
 
                 <button
                   type="submit"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#145c3b] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#10492f]"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark"
                 >
                   <Save size={18} />
                   Save Changes
@@ -573,7 +673,7 @@ export default function Settings() {
             </form>
           </div>
 
-          <p className="pb-2 text-center text-xs text-gray-400">
+          <p className="pb-2 text-center text-xs text-muted">
             Student Portal · Account Settings
           </p>
         </main>

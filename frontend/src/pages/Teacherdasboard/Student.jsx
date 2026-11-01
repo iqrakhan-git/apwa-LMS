@@ -1,18 +1,10 @@
+
 import { useEffect, useState } from "react";
 
 import {
-  LayoutDashboard,
-  BookOpen,
+   BookOpen,
   Users,
-  CalendarCheck,
-  ClipboardList,
   GraduationCap,
-  Megaphone,
-  MessageSquare,
-  CalendarDays,
-  UserRound,
-  Settings,
-  LogOut,
   Search,
   Bell,
   Plus,
@@ -24,10 +16,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import {
-  initializeApp,
-  getApps,
-} from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 
 import {
   getAuth,
@@ -50,13 +39,12 @@ import {
 } from "firebase/firestore";
 
 import firebaseConfig, { db } from "../../firebase/config";
+import Sidebar2 from "../../components/Sidebar2";
 
 /*
 |--------------------------------------------------------------------------
 | Secondary Firebase Authentication
 |--------------------------------------------------------------------------
-| This prevents creating a student account from replacing the teacher's
-| currently signed-in account.
 */
 
 const secondaryAppName = "student-registration-app";
@@ -69,7 +57,9 @@ const studentRegistrationApp =
   existingSecondaryApp ||
   initializeApp(firebaseConfig, secondaryAppName);
 
-const studentRegistrationAuth = getAuth(studentRegistrationApp);
+const studentRegistrationAuth = getAuth(
+  studentRegistrationApp
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -77,63 +67,7 @@ const studentRegistrationAuth = getAuth(studentRegistrationApp);
 |--------------------------------------------------------------------------
 */
 
-const menuItems = [
-  {
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    path: "/dashboard",
-  },
-  {
-    label: "Courses",
-    icon: BookOpen,
-    path: "/courses",
-  },
-  {
-    label: "Students",
-    icon: Users,
-    path: "/students",
-  },
-  {
-    label: "Attendance",
-    icon: CalendarCheck,
-    path: "/attendance",
-  },
-  {
-    label: "Assignments",
-    icon: ClipboardList,
-    path: "/assignments",
-  },
-  {
-    label: "Teachers",
-    icon: GraduationCap,
-    path: "/teachers",
-  },
-  {
-    label: "Announcements",
-    icon: Megaphone,
-    path: "/announcements",
-  },
-  {
-    label: "Messages",
-    icon: MessageSquare,
-    path: "/messages",
-  },
-  {
-    label: "Calendar",
-    icon: CalendarDays,
-    path: "/calendar",
-  },
-  {
-    label: "Profile",
-    icon: UserRound,
-    path: "/profile",
-  },
-  {
-    label: "Settings",
-    icon: Settings,
-    path: "/settings",
-  },
-];
+
 
 const classOptions = [
   "CS-101",
@@ -158,7 +92,6 @@ const emptyForm = {
 
 export default function Students() {
   const [students, setStudents] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -171,13 +104,10 @@ export default function Students() {
   const [showSignup, setShowSignup] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  const [selectedStudent, setSelectedStudent] =
-    useState(null);
-
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const [activeMenu, setActiveMenu] = useState(null);
 
-  const [studentForm, setStudentForm] =
-    useState(emptyForm);
+  const [studentForm, setStudentForm] = useState(emptyForm);
 
   const pageSize = 6;
 
@@ -224,10 +154,7 @@ export default function Students() {
           setStudents(firebaseStudents);
         }
       } catch (error) {
-        console.error(
-          "Error loading students:",
-          error
-        );
+        console.error("Error loading students:", error);
 
         if (!cancelled) {
           alert(
@@ -254,22 +181,20 @@ export default function Students() {
   |--------------------------------------------------------------------------
   */
 
-  const filteredStudents = students.filter(
-    (student) => {
-      const searchText = search.toLowerCase().trim();
+  const filteredStudents = students.filter((student) => {
+    const searchText = search.toLowerCase().trim();
 
-      const matchesSearch =
-        student.name.toLowerCase().includes(searchText) ||
-        student.id.toLowerCase().includes(searchText) ||
-        student.email.toLowerCase().includes(searchText);
+    const matchesSearch =
+      student.name.toLowerCase().includes(searchText) ||
+      student.id.toLowerCase().includes(searchText) ||
+      student.email.toLowerCase().includes(searchText);
 
-      const matchesClass =
-        selectedClass === "All Classes" ||
-        student.class === selectedClass;
+    const matchesClass =
+      selectedClass === "All Classes" ||
+      student.class === selectedClass;
 
-      return matchesSearch && matchesClass;
-    }
-  );
+    return matchesSearch && matchesClass;
+  });
 
   const totalPages = Math.max(
     1,
@@ -281,8 +206,7 @@ export default function Students() {
     totalPages
   );
 
-  const startIndex =
-    (safeCurrentPage - 1) * pageSize;
+  const startIndex = (safeCurrentPage - 1) * pageSize;
 
   const visibleStudents = filteredStudents.slice(
     startIndex,
@@ -327,30 +251,23 @@ export default function Students() {
     }
 
     if (studentId.includes("/")) {
-      alert(
-        "Student ID cannot contain a forward slash (/)."
-      );
+      alert("Student ID cannot contain a forward slash (/).");
       return;
     }
 
     if (password.length < 8) {
-      alert(
-        "Password must contain at least 8 characters."
-      );
+      alert("Password must contain at least 8 characters.");
       return;
     }
 
     const duplicateStudent = students.some(
       (student) =>
-        student.id.toLowerCase() ===
-          studentId.toLowerCase() ||
+        student.id.toLowerCase() === studentId.toLowerCase() ||
         student.email.toLowerCase() === email
     );
 
     if (duplicateStudent) {
-      alert(
-        "This Student ID or email already exists."
-      );
+      alert("This Student ID or email already exists.");
       return;
     }
 
@@ -360,15 +277,7 @@ export default function Students() {
     let firestoreSaved = false;
 
     try {
-      /*
-       * Check the Student ID in Firestore.
-       */
-
-      const studentRef = doc(
-        db,
-        "students",
-        studentId
-      );
+      const studentRef = doc(db, "students", studentId);
 
       const existingStudent = await getDoc(studentRef);
 
@@ -378,28 +287,23 @@ export default function Students() {
       }
 
       /*
-       * Create account using the secondary Firebase Auth.
+       * Create account using secondary Firebase Authentication.
        */
 
-      const credential =
-        await createUserWithEmailAndPassword(
-          studentRegistrationAuth,
-          email,
-          password
-        );
+      const credential = await createUserWithEmailAndPassword(
+        studentRegistrationAuth,
+        email,
+        password
+      );
 
       createdUser = credential.user;
-
-      /*
-       * Add the student's display name.
-       */
 
       await updateProfile(createdUser, {
         displayName: name,
       });
 
       /*
-       * Save the student profile to Firestore.
+       * Save student profile in Firestore.
        */
 
       await setDoc(studentRef, {
@@ -415,10 +319,6 @@ export default function Students() {
       });
 
       firestoreSaved = true;
-
-      /*
-       * Update the visible table immediately.
-       */
 
       const newStudent = {
         id: studentId,
@@ -443,19 +343,9 @@ export default function Students() {
       setStudentForm(emptyForm);
       setShowSignup(false);
 
-      alert(
-        "Student account created successfully!"
-      );
+      alert("Student account created successfully!");
     } catch (error) {
-      console.error(
-        "Student creation error:",
-        error
-      );
-
-      /*
-       * If Firestore saving fails after Auth registration,
-       * remove the newly created Auth account when possible.
-       */
+      console.error("Student creation error:", error);
 
       if (createdUser && !firestoreSaved) {
         try {
@@ -497,10 +387,6 @@ export default function Students() {
           "Could not create the student account."
       );
     } finally {
-      /*
-       * Keep the teacher's current account unchanged.
-       */
-
       try {
         if (studentRegistrationAuth.currentUser) {
           await signOut(studentRegistrationAuth);
@@ -530,9 +416,7 @@ export default function Students() {
     if (!confirmed) return;
 
     try {
-      await deleteDoc(
-        doc(db, "students", studentId)
-      );
+      await deleteDoc(doc(db, "students", studentId));
 
       const updatedStudents = students.filter(
         (student) => student.id !== studentId
@@ -570,14 +454,9 @@ export default function Students() {
         Math.min(page, updatedTotalPages)
       );
 
-      alert(
-        "Student record deleted from Firestore."
-      );
+      alert("Student record deleted from Firestore.");
     } catch (error) {
-      console.error(
-        "Delete student error:",
-        error
-      );
+      console.error("Delete student error:", error);
 
       alert(
         "Could not delete the student. Check your Firestore permissions."
@@ -604,94 +483,26 @@ export default function Students() {
   */
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
+    <div className="min-h-screen bg-background text-heading">
       <div className="flex min-h-screen">
 
         {/* SIDEBAR */}
 
-        <aside className="hidden w-64 shrink-0 flex-col bg-emerald-950 text-white md:flex">
-
-          {/* Logo */}
-
-          <div className="flex h-20 items-center gap-3 border-b border-white/10 px-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500">
-              <GraduationCap size={24} />
-            </div>
-
-            <div>
-              <h1 className="text-lg font-bold">
-                APWA LMS
-              </h1>
-
-              <p className="text-xs text-emerald-200">
-                Learning Management
-              </p>
-            </div>
-          </div>
-
-          {/* Menu */}
-
-          <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-5">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const active = item.label === "Students";
-
-              return (
-                <a
-                  key={item.label}
-                  href={item.path}
-                  onClick={(event) => {
-                    event.preventDefault();
-
-                    if (!active) {
-                      window.location.href = item.path;
-                    }
-                  }}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
-                    active
-                      ? "bg-emerald-600 text-white shadow-lg shadow-emerald-950/20"
-                      : "text-emerald-100 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  <Icon size={19} />
-
-                  <span>{item.label}</span>
-                </a>
-              );
-            })}
-          </nav>
-
-          {/* Sidebar Footer */}
-
-          <div className="border-t border-white/10 p-4">
-            <button
-              type="button"
-              onClick={() => {
-                alert(
-                  "Connect your existing logout function here."
-                );
-              }}
-              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-emerald-100 transition hover:bg-white/10 hover:text-white"
-            >
-              <LogOut size={19} />
-              Logout
-            </button>
-          </div>
-        </aside>
+       <Sidebar2/>
 
         {/* MAIN CONTENT */}
 
-        <main className="min-w-0 flex-1">
+        <main className=" ml-65 flex-1">
 
           {/* TOP NAVBAR */}
 
-          <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6 lg:px-8">
+          <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-border bg-card px-4 sm:px-6 lg:px-8">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">
+              <h2 className="text-xl font-bold text-heading">
                 Students
               </h2>
 
-              <p className="mt-1 hidden text-sm text-slate-500 sm:block">
+              <p className="mt-1 hidden text-sm text-muted sm:block">
                 Manage and monitor your students
               </p>
             </div>
@@ -700,24 +511,23 @@ export default function Students() {
               <button
                 type="button"
                 aria-label="Notifications"
-                className="relative rounded-xl border border-slate-200 p-2.5 text-slate-600 transition hover:bg-slate-50"
+                className="relative rounded-xl border border-border p-2.5 text-muted transition hover:bg-background"
               >
                 <Bell size={20} />
-
-                <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-accent" />
               </button>
 
-              <div className="flex items-center gap-3 border-l border-slate-200 pl-3 sm:pl-5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-800">
+              <div className="flex items-center gap-3 border-l border-border pl-3 sm:pl-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 font-bold text-primary-dark">
                   T
                 </div>
 
                 <div className="hidden sm:block">
-                  <p className="text-sm font-semibold text-slate-900">
+                  <p className="text-sm font-semibold text-heading">
                     Teacher
                   </p>
 
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted">
                     Administrator
                   </p>
                 </div>
@@ -733,11 +543,11 @@ export default function Students() {
 
             <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
-                <h1 className="text-2xl font-bold text-slate-900">
+                <h1 className="text-2xl font-bold text-heading">
                   Student Management
                 </h1>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-muted">
                   View, search, and manage student records.
                 </p>
               </div>
@@ -748,7 +558,7 @@ export default function Students() {
                   setStudentForm(emptyForm);
                   setShowSignup(true);
                 }}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark"
               >
                 <Plus size={19} />
                 Add Student
@@ -758,36 +568,41 @@ export default function Students() {
             {/* STATISTICS */}
 
             <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
+              {/* Total Students */}
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-muted">
                       Total Students
                     </p>
 
-                    <h3 className="mt-2 text-3xl font-bold text-slate-900">
+                    <h3 className="mt-2 text-3xl font-bold text-heading">
                       {students.length}
                     </h3>
                   </div>
 
-                  <div className="rounded-xl bg-emerald-100 p-3 text-emerald-700">
+                  <div className="rounded-xl bg-purple-100 p-3 text-primary">
                     <Users size={24} />
                   </div>
                 </div>
 
-                <p className="mt-3 text-xs text-slate-500">
+                <p className="mt-3 text-xs text-muted">
                   Registered student profiles
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              {/* Active Students */}
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-muted">
                       Active Students
                     </p>
 
-                    <h3 className="mt-2 text-3xl font-bold text-slate-900">
+                    <h3 className="mt-2 text-3xl font-bold text-heading">
                       {
                         students.filter(
                           (student) =>
@@ -797,38 +612,42 @@ export default function Students() {
                     </h3>
                   </div>
 
-                  <div className="rounded-xl bg-green-100 p-3 text-green-700">
+                  <div className="rounded-xl bg-purple-100 p-3 text-primary">
                     <GraduationCap size={24} />
                   </div>
                 </div>
 
-                <p className="mt-3 text-xs text-slate-500">
+                <p className="mt-3 text-xs text-muted">
                   Students marked as active
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:col-span-2 xl:col-span-1">
+              {/* Classes */}
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:col-span-2 xl:col-span-1">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-muted">
                       Classes
                     </p>
 
-                    <h3 className="mt-2 text-3xl font-bold text-slate-900">
-                      {new Set(
-                        students.map(
-                          (student) => student.class
-                        )
-                      ).size}
+                    <h3 className="mt-2 text-3xl font-bold text-heading">
+                      {
+                        new Set(
+                          students.map(
+                            (student) => student.class
+                          )
+                        ).size
+                      }
                     </h3>
                   </div>
 
-                  <div className="rounded-xl bg-teal-100 p-3 text-teal-700">
+                  <div className="rounded-xl bg-purple-100 p-3 text-primary">
                     <BookOpen size={24} />
                   </div>
                 </div>
 
-                <p className="mt-3 text-xs text-slate-500">
+                <p className="mt-3 text-xs text-muted">
                   Classes with registered students
                 </p>
               </div>
@@ -836,32 +655,31 @@ export default function Students() {
 
             {/* STUDENT TABLE CARD */}
 
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
 
               {/* TABLE FILTERS */}
 
-              <div className="flex flex-col gap-4 border-b border-slate-200 p-5 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex flex-col gap-4 border-b border-border p-5 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">
+                  <h3 className="text-lg font-bold text-heading">
                     All Students
                   </h3>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-muted">
                     {filteredStudents.length} student
-                    {filteredStudents.length !== 1
-                      ? "s"
-                      : ""}{" "}
+                    {filteredStudents.length !== 1 ? "s" : ""}{" "}
                     found
                   </p>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
+
                   {/* Search */}
 
                   <div className="relative">
                     <Search
                       size={18}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
                     />
 
                     <input
@@ -872,7 +690,7 @@ export default function Students() {
                         setCurrentPage(1);
                       }}
                       placeholder="Search students..."
-                      className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 sm:w-64"
+                      className="w-full rounded-xl border border-border bg-card py-2.5 pl-10 pr-4 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-purple-100 sm:w-64"
                     />
                   </div>
 
@@ -884,7 +702,7 @@ export default function Students() {
                       setSelectedClass(event.target.value);
                       setCurrentPage(1);
                     }}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                    className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
                   >
                     <option value="All Classes">
                       All Classes
@@ -906,35 +724,36 @@ export default function Students() {
 
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[760px] text-left">
-                  <thead className="bg-slate-50">
+
+                  <thead className="bg-background">
                     <tr>
-                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         Student
                       </th>
 
-                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         Student ID
                       </th>
 
-                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         Class
                       </th>
 
-                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         Email
                       </th>
 
-                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-muted">
                         Status
                       </th>
 
-                      <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-muted">
                         Actions
                       </th>
                     </tr>
                   </thead>
 
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-border">
 
                     {/* Loading */}
 
@@ -942,7 +761,7 @@ export default function Students() {
                       <tr>
                         <td
                           colSpan={6}
-                          className="px-6 py-16 text-center text-sm text-slate-500"
+                          className="px-6 py-16 text-center text-sm text-muted"
                         >
                           Loading students from Firebase...
                         </td>
@@ -951,27 +770,26 @@ export default function Students() {
 
                     {/* Empty State */}
 
-                    {!loading &&
-                      visibleStudents.length === 0 && (
-                        <tr>
-                          <td
-                            colSpan={6}
-                            className="px-6 py-16 text-center"
-                          >
-                            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                              <Users size={26} />
-                            </div>
+                    {!loading && visibleStudents.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="px-6 py-16 text-center"
+                        >
+                          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-purple-50 text-primary">
+                            <Users size={26} />
+                          </div>
 
-                            <h4 className="font-semibold text-slate-900">
-                              No students found
-                            </h4>
+                          <h4 className="font-semibold text-heading">
+                            No students found
+                          </h4>
 
-                            <p className="mt-1 text-sm text-slate-500">
-                              Add a student or change your search filters.
-                            </p>
-                          </td>
-                        </tr>
-                      )}
+                          <p className="mt-1 text-sm text-muted">
+                            Add a student or change your search filters.
+                          </p>
+                        </td>
+                      </tr>
+                    )}
 
                     {/* Student Rows */}
 
@@ -979,13 +797,14 @@ export default function Students() {
                       visibleStudents.map((student) => (
                         <tr
                           key={student.id}
-                          className="transition hover:bg-slate-50/80"
+                          className="transition hover:bg-background"
                         >
+
                           {/* Student Name */}
 
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-800">
+                              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-purple-100 text-sm font-bold text-primary-dark">
                                 {student.name
                                   .split(" ")
                                   .map((part) => part[0])
@@ -995,11 +814,11 @@ export default function Students() {
                               </div>
 
                               <div>
-                                <p className="text-sm font-semibold text-slate-900">
+                                <p className="text-sm font-semibold text-heading">
                                   {student.name}
                                 </p>
 
-                                <p className="mt-1 text-xs text-slate-500">
+                                <p className="mt-1 text-xs text-muted">
                                   Student
                                 </p>
                               </div>
@@ -1009,7 +828,7 @@ export default function Students() {
                           {/* Student ID */}
 
                           <td className="px-6 py-4">
-                            <span className="rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-700">
+                            <span className="rounded-lg bg-background px-2.5 py-1.5 text-xs font-semibold text-heading">
                               {student.id}
                             </span>
                           </td>
@@ -1036,14 +855,14 @@ export default function Students() {
                             <span
                               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
                                 student.status === "Active"
-                                  ? "bg-emerald-50 text-emerald-700"
+                                  ? "bg-purple-50 text-primary"
                                   : "bg-slate-100 text-slate-600"
                               }`}
                             >
                               <span
                                 className={`h-1.5 w-1.5 rounded-full ${
                                   student.status === "Active"
-                                    ? "bg-emerald-500"
+                                    ? "bg-accent"
                                     : "bg-slate-400"
                                 }`}
                               />
@@ -1066,19 +885,20 @@ export default function Students() {
                                       : student.id
                                   )
                                 }
-                                className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                                className="rounded-lg p-2 text-muted transition hover:bg-background hover:text-heading"
                               >
                                 <MoreVertical size={19} />
                               </button>
 
                               {activeMenu === student.id && (
-                                <div className="absolute right-0 top-10 z-10 w-44 rounded-xl border border-slate-200 bg-white p-1.5 text-left shadow-xl">
+                                <div className="absolute right-0 top-10 z-10 w-44 rounded-xl border border-border bg-card p-1.5 text-left shadow-xl">
+
                                   <button
                                     type="button"
                                     onClick={() =>
                                       openStudentDetails(student)
                                     }
-                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-700"
+                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-heading transition hover:bg-purple-50 hover:text-primary"
                                   >
                                     <Eye size={16} />
                                     View Details
@@ -1094,6 +914,7 @@ export default function Students() {
                                     <Trash2 size={16} />
                                     Delete Student
                                   </button>
+
                                 </div>
                               )}
                             </div>
@@ -1106,8 +927,8 @@ export default function Students() {
 
               {/* PAGINATION */}
 
-              <div className="flex flex-col gap-4 border-t border-slate-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-slate-500">
+              <div className="flex flex-col gap-4 border-t border-border px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-muted">
                   Showing{" "}
                   {filteredStudents.length === 0
                     ? 0
@@ -1129,7 +950,7 @@ export default function Students() {
                         Math.max(1, page - 1)
                       )
                     }
-                    className="rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="rounded-lg border border-border p-2 text-muted transition hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
                     aria-label="Previous page"
                   >
                     <ChevronLeft size={18} />
@@ -1145,8 +966,8 @@ export default function Students() {
                       onClick={() => setCurrentPage(page)}
                       className={`h-9 min-w-9 rounded-lg px-3 text-sm font-semibold transition ${
                         safeCurrentPage === page
-                          ? "bg-emerald-700 text-white"
-                          : "border border-slate-200 text-slate-600 hover:bg-slate-50"
+                          ? "bg-primary text-white"
+                          : "border border-border text-muted hover:bg-background"
                       }`}
                     >
                       {page}
@@ -1155,15 +976,13 @@ export default function Students() {
 
                   <button
                     type="button"
-                    disabled={
-                      safeCurrentPage >= totalPages
-                    }
+                    disabled={safeCurrentPage >= totalPages}
                     onClick={() =>
                       setCurrentPage((page) =>
                         Math.min(totalPages, page + 1)
                       )
                     }
-                    className="rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="rounded-lg border border-border p-2 text-muted transition hover:bg-background disabled:cursor-not-allowed disabled:opacity-40"
                     aria-label="Next page"
                   >
                     <ChevronRight size={18} />
@@ -1188,17 +1007,17 @@ export default function Students() {
             }
           }}
         >
-          <div className="my-6 w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl">
+          <div className="my-6 w-full max-w-lg overflow-hidden rounded-2xl bg-card shadow-2xl">
 
             {/* Modal Header */}
 
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+            <div className="flex items-center justify-between border-b border-border px-6 py-5">
               <div>
-                <h2 className="text-xl font-bold text-slate-900">
+                <h2 className="text-xl font-bold text-heading">
                   Add New Student
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-muted">
                   Create a student account.
                 </p>
               </div>
@@ -1206,7 +1025,7 @@ export default function Students() {
               <button
                 type="button"
                 onClick={() => setShowSignup(false)}
-                className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-lg p-2 text-muted transition hover:bg-background hover:text-heading"
                 aria-label="Close modal"
               >
                 <X size={20} />
@@ -1219,12 +1038,13 @@ export default function Students() {
               onSubmit={addStudent}
               className="space-y-5 p-6"
             >
+
               {/* Name */}
 
               <div>
                 <label
                   htmlFor="student-name"
-                  className="mb-2 block text-sm font-semibold text-slate-700"
+                  className="mb-2 block text-sm font-semibold text-heading"
                 >
                   Full Name
                 </label>
@@ -1238,7 +1058,7 @@ export default function Students() {
                   placeholder="Enter student's full name"
                   autoComplete="name"
                   required
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-purple-100"
                 />
               </div>
 
@@ -1247,7 +1067,7 @@ export default function Students() {
               <div>
                 <label
                   htmlFor="student-id"
-                  className="mb-2 block text-sm font-semibold text-slate-700"
+                  className="mb-2 block text-sm font-semibold text-heading"
                 >
                   Student ID
                 </label>
@@ -1260,7 +1080,7 @@ export default function Students() {
                   onChange={handleFormChange}
                   placeholder="e.g. STU-008"
                   required
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-purple-100"
                 />
               </div>
 
@@ -1269,7 +1089,7 @@ export default function Students() {
               <div>
                 <label
                   htmlFor="student-email"
-                  className="mb-2 block text-sm font-semibold text-slate-700"
+                  className="mb-2 block text-sm font-semibold text-heading"
                 >
                   Email Address
                 </label>
@@ -1283,7 +1103,7 @@ export default function Students() {
                   placeholder="student@example.com"
                   autoComplete="email"
                   required
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-purple-100"
                 />
               </div>
 
@@ -1292,7 +1112,7 @@ export default function Students() {
               <div>
                 <label
                   htmlFor="student-password"
-                  className="mb-2 block text-sm font-semibold text-slate-700"
+                  className="mb-2 block text-sm font-semibold text-heading"
                 >
                   Password
                 </label>
@@ -1307,10 +1127,10 @@ export default function Students() {
                   autoComplete="new-password"
                   minLength={8}
                   required
-                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-purple-100"
                 />
 
-                <p className="mt-1.5 text-xs text-slate-500">
+                <p className="mt-1.5 text-xs text-muted">
                   The password is stored securely by Firebase Authentication, not in Firestore.
                 </p>
               </div>
@@ -1320,7 +1140,7 @@ export default function Students() {
               <div>
                 <label
                   htmlFor="student-class"
-                  className="mb-2 block text-sm font-semibold text-slate-700"
+                  className="mb-2 block text-sm font-semibold text-heading"
                 >
                   Class
                 </label>
@@ -1330,7 +1150,7 @@ export default function Students() {
                   name="class"
                   value={studentForm.class}
                   onChange={handleFormChange}
-                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+                  className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
                 >
                   {classOptions.map((className) => (
                     <option
@@ -1353,7 +1173,7 @@ export default function Students() {
                     setStudentForm(emptyForm);
                   }}
                   disabled={submitting}
-                  className="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
+                  className="flex-1 rounded-xl border border-border px-4 py-3 text-sm font-semibold text-heading transition hover:bg-background disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -1361,7 +1181,7 @@ export default function Students() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {submitting
                     ? "Creating Account..."
@@ -1387,12 +1207,12 @@ export default function Students() {
             }
           }}
         >
-          <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+          <div className="w-full max-w-md overflow-hidden rounded-2xl bg-card shadow-2xl">
 
             {/* Header */}
 
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
-              <h2 className="text-xl font-bold text-slate-900">
+            <div className="flex items-center justify-between border-b border-border px-6 py-5">
+              <h2 className="text-xl font-bold text-heading">
                 Student Details
               </h2>
 
@@ -1402,7 +1222,7 @@ export default function Students() {
                   setShowDetails(false);
                   setSelectedStudent(null);
                 }}
-                className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+                className="rounded-lg p-2 text-muted transition hover:bg-background"
                 aria-label="Close details"
               >
                 <X size={20} />
@@ -1412,8 +1232,8 @@ export default function Students() {
             {/* Student Profile */}
 
             <div className="p-6">
-              <div className="flex flex-col items-center border-b border-slate-100 pb-6 text-center">
-                <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-2xl font-bold text-emerald-800">
+              <div className="flex flex-col items-center border-b border-border pb-6 text-center">
+                <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-purple-100 text-2xl font-bold text-primary-dark">
                   {selectedStudent.name
                     .split(" ")
                     .map((part) => part[0])
@@ -1422,15 +1242,15 @@ export default function Students() {
                     .toUpperCase()}
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900">
+                <h3 className="text-xl font-bold text-heading">
                   {selectedStudent.name}
                 </h3>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-muted">
                   {selectedStudent.id}
                 </p>
 
-                <span className="mt-3 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                <span className="mt-3 rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-primary">
                   {selectedStudent.status}
                 </span>
               </div>
@@ -1439,41 +1259,41 @@ export default function Students() {
 
               <div className="space-y-4 py-5">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
                     Email Address
                   </p>
 
-                  <p className="mt-1 break-all text-sm font-medium text-slate-800">
+                  <p className="mt-1 break-all text-sm font-medium text-heading">
                     {selectedStudent.email}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
                     Student ID
                   </p>
 
-                  <p className="mt-1 text-sm font-medium text-slate-800">
+                  <p className="mt-1 text-sm font-medium text-heading">
                     {selectedStudent.id}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
                     Class
                   </p>
 
-                  <p className="mt-1 text-sm font-medium text-slate-800">
+                  <p className="mt-1 text-sm font-medium text-heading">
                     {selectedStudent.class}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
                     Firebase UID
                   </p>
 
-                  <p className="mt-1 break-all text-xs text-slate-600">
+                  <p className="mt-1 break-all text-xs text-muted">
                     {selectedStudent.uid || "Not available"}
                   </p>
                 </div>
@@ -1485,7 +1305,7 @@ export default function Students() {
                   setShowDetails(false);
                   setSelectedStudent(null);
                 }}
-                className="w-full rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800"
+                className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark"
               >
                 Close
               </button>

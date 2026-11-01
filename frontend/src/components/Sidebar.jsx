@@ -1,5 +1,6 @@
 
 import { NavLink } from "react-router-dom";
+
 import {
   GraduationCap,
   LayoutDashboard,
@@ -15,7 +16,7 @@ import {
 
 const navigation = [
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-  { name: "Courses", path: "/courses", icon: BookOpen },
+  { name: "Subject", path: "/courses", icon: BookOpen },
   { name: "Assignments", path: "/assignments", icon: ClipboardList },
   { name: "Attendance", path: "/attendance", icon: CalendarCheck },
   { name: "Grades", path: "/grades", icon: Award },
@@ -26,19 +27,21 @@ const navigation = [
 
 export default function Sidebar() {
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col bg-[#064e3b] px-4 py-5 text-white">
+    <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-border bg-sidebar px-4 py-5 text-white">
 
       {/* Logo */}
       <div className="mb-12">
-      <div className="flex items-center gap-3 px-2">
-        <GraduationCap size={30} />
+        <div className="flex items-center gap-3 px-2">
+          <GraduationCap size={30} className="shrink-0 text-accent" />
 
-        <span className="text-lg font-bold ">
-         APWA Synapse
+          <span className="text-lg font-bold">
+            APWA Synapse
+          </span>
+        </div>
+
+        <span className="ml-9 text-sm text-white/60">
+          Intelligent Learning Portal
         </span>
-        
-      </div>
-      <span className="text-sm ml-9 text-gray-400">Intelligent Learning Portal</span>
       </div>
 
       {/* Navigation */}
@@ -53,8 +56,8 @@ export default function Sidebar() {
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition ${
                   isActive
-                    ? "bg-emerald-600 text-white shadow-md"
-                    : "text-emerald-100 hover:bg-white/10 hover:text-white"
+                    ? "bg-primary text-white shadow-md"
+                    : "text-white/75 hover:bg-primary/15 hover:text-white"
                 }`
               }
             >
@@ -68,11 +71,10 @@ export default function Sidebar() {
       {/* Logout */}
       <button
         type="button"
-        className="mt-5 flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-red-400 transition hover:bg-white/10  hover:text-red-500"
-      > 
+        className="mt-5 flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-white/70 transition hover:bg-primary/15 hover:text-white"
+      >
         <LogOut size={19} />
-        Logout
-        
+        <span>Logout</span>
       </button>
 
     </aside>

@@ -1,4 +1,3 @@
-
 import {
   BookOpen,
   ClipboardList,
@@ -11,37 +10,37 @@ const stats = [
     title: "Enrolled Courses",
     value: "5",
     icon: BookOpen,
-    iconColor: "text-emerald-600",
-    iconBg: "bg-emerald-100",
-    cardBg: "bg-emerald-50/60",
-    border: "border-emerald-100",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/10",
+    cardBg: "bg-primary/5",
+    border: "border-primary/20",
   },
   {
     title: "Pending Assignments",
     value: "3",
     icon: ClipboardList,
-    iconColor: "text-amber-600",
-    iconBg: "bg-amber-100",
-    cardBg: "bg-amber-50/60",
-    border: "border-amber-100",
+    iconColor: "text-primary-dark",
+    iconBg: "bg-primary-dark/10",
+    cardBg: "bg-primary-dark/5",
+    border: "border-primary-dark/20",
   },
   {
     title: "Attendance Rate",
     value: "92%",
     icon: CalendarCheck,
-    iconColor: "text-sky-600",
-    iconBg: "bg-sky-100",
-    cardBg: "bg-sky-50/60",
-    border: "border-sky-100",
+    iconColor: "text-secondary",
+    iconBg: "bg-secondary/10",
+    cardBg: "bg-secondary/5",
+    border: "border-secondary/20",
   },
   {
     title: "Overall GPA",
     value: "3.8",
     icon: Award,
-    iconColor: "text-purple-600",
-    iconBg: "bg-purple-100",
-    cardBg: "bg-purple-50/60",
-    border: "border-purple-100",
+    iconColor: "text-primary",
+    iconBg: "bg-accent/20",
+    cardBg: "bg-accent/10",
+    border: "border-accent/30",
   },
 ];
 
@@ -65,12 +64,12 @@ export default function StatsCards() {
             </div>
 
             {/* Title */}
-            <p className="text-sm font-medium text-gray-500">
+            <p className="text-sm font-medium text-muted">
               {stat.title}
             </p>
 
             {/* Value */}
-            <h2 className="mt-1 text-3xl font-bold tracking-tight text-[#173d33]">
+            <h2 className="mt-1 text-3xl font-bold tracking-tight text-heading">
               {stat.value}
             </h2>
           </div>

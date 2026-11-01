@@ -1,4 +1,3 @@
-
 import {
   Megaphone,
   ArrowUpRight,
@@ -22,17 +21,17 @@ const announcements = [
 
 export default function RecentAnnouncements() {
   return (
-    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+    <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
 
       {/* Heading */}
       <div className="mb-5 flex items-center justify-between gap-3">
-        <h2 className="text-lg font-bold text-[#173d33]">
+        <h2 className="text-lg font-bold text-heading">
           Recent Announcements
         </h2>
 
         <button
           type="button"
-          className="flex shrink-0 items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-900"
+          className="flex shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:text-primary-dark"
         >
           View All
           <ArrowUpRight size={16} />
@@ -40,7 +39,7 @@ export default function RecentAnnouncements() {
       </div>
 
       {/* Announcement List */}
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-border">
 
         {announcements.map((announcement) => (
           <article
@@ -49,23 +48,23 @@ export default function RecentAnnouncements() {
           >
             <div className="flex items-start gap-3">
 
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <Megaphone size={19} />
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-gray-800">
+                <h3 className="text-sm font-semibold text-heading">
                   {announcement.title}
                 </h3>
 
-                <p className="mt-1 max-w-2xl text-xs leading-5 text-gray-500">
+                <p className="mt-1 max-w-2xl text-xs leading-5 text-muted">
                   {announcement.description}
                 </p>
               </div>
 
             </div>
 
-            <div className="flex shrink-0 items-center gap-1.5 text-xs text-gray-400 sm:pt-1">
+            <div className="flex shrink-0 items-center gap-1.5 text-xs text-muted sm:pt-1">
               <CalendarDays size={14} />
               {announcement.date}
             </div>

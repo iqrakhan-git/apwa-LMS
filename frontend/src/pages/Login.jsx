@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,16 +7,88 @@ import {
   ContactRound,
 } from "lucide-react";
 
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  limit,
-} from "firebase/firestore";
+/*
+ * Frontend-only demo authentication object.
+ * Accounts are stored in this browser's localStorage.
+ * This is NOT secure for production because browser storage can be edited.
+ */
+const auth = {
+  storageKey: "apwa_lms_users",
+  sessionKey: "apwa_lms_current_user",
 
-import {  loginUser } from "../components/Auth/Auth.js";
-import {db} from "./../firebase/config.js"
+  getUsers() {
+    try {
+      return JSON.parse(localStorage.getItem(this.storageKey) || "[]");
+    } catch {
+      return [];
+    }
+  },
+
+  async signup({ studentId, password, name = "Student" }) {
+    const users = this.getUsers();
+    const normalizedId = studentId.trim().toLowerCase();
+
+    if (users.some((user) => user.studentId.toLowerCase() === normalizedId)) {
+      return { success: false, error: "This Student ID already exists." };
+    }
+
+    const user = {
+      studentId: studentId.trim(),
+      password,
+      name,
+      role: "student",
+    };
+
+    localStorage.setItem(this.storageKey, JSON.stringify([...users, user]));
+    return { success: true, user: { studentId: user.studentId, name: user.name, role: user.role } };
+  },
+
+  async login(studentId, password) {
+    const normalizedId = studentId.trim().toLowerCase();
+    const users = this.getUsers();
+    const user = users.find(
+      (item) =>
+        item.studentId.toLowerCase() === normalizedId &&
+        item.password === password
+    );
+
+    // Demo-only account so you can test the page immediately.
+    // Replace this with a real backend before using the site with real students.
+    const isDemoAccount =
+      normalizedId === "apwa001" && password === "Student@123";
+
+    if (!user && !isDemoAccount) {
+      return { success: false, error: "invalid-credentials" };
+    }
+
+    const safeUser = user
+      ? { studentId: user.studentId, name: user.name, role: user.role || "student" }
+      : { studentId: "APWA001", name: "Demo Student", role: "student" };
+
+    localStorage.setItem(this.sessionKey, JSON.stringify(safeUser));
+    return { success: true, user: safeUser };
+  },
+
+  getCurrentUser() {
+    try {
+      return JSON.parse(localStorage.getItem(this.sessionKey) || "null");
+    } catch {
+      return null;
+    }
+  },
+
+  isAuthenticated() {
+    return Boolean(this.getCurrentUser());
+  },
+
+  getRole() {
+    return this.getCurrentUser()?.role || null;
+  },
+
+  logout() {
+    localStorage.removeItem(this.sessionKey);
+  },
+};
 
 function Login() {
   const navigate = useNavigate();
@@ -71,30 +142,6 @@ function Login() {
   };
 
   // =========================
-  // Find Student Email
-  // =========================
-
-  const getStudentEmail = async (studentId) => {
-    const studentsRef = collection(db, "students");
-
-    const studentQuery = query(
-      studentsRef,
-      where("studentId", "==", studentId.trim()),
-      limit(1)
-    );
-
-    const snapshot = await getDocs(studentQuery);
-
-    if (snapshot.empty) {
-      return null;
-    }
-
-    const studentData = snapshot.docs[0].data();
-
-    return studentData.email || null;
-  };
-
-  // =========================
   // Login
   // =========================
 
@@ -107,68 +154,22 @@ function Login() {
     setErrors({});
 
     try {
-      // Find the student's email using their Student ID.
-      const email = await getStudentEmail(formData.studentId);
-
-      if (!email) {
-        setErrors({
-          studentId:
-            "Student ID not found. Please check your Student ID.",
-        });
-
-        return;
-      }
-
-      // Firebase Authentication uses email and password.
-      const result = await loginUser(
-        email,
+      const result = await auth.login(
+        formData.studentId,
         formData.password
       );
 
-      if (result?.success) {
-        console.log("Login successful");
-        console.log("User:", result.user);
-
+      if (result.success) {
         navigate("/dashboard");
       } else {
-        const errorCode = result?.error?.code || result?.error;
-
-        switch (errorCode) {
-          case "auth/user-not-found":
-          case "auth/wrong-password":
-          case "auth/invalid-credential":
-            setErrors({
-              general: "Student ID or password is incorrect.",
-            });
-            break;
-
-          case "auth/invalid-email":
-            setErrors({
-              general:
-                "The email associated with this student account is invalid.",
-            });
-            break;
-
-          case "auth/too-many-requests":
-            setErrors({
-              general:
-                "Too many login attempts. Please try again later.",
-            });
-            break;
-
-          default:
-            setErrors({
-              general:
-                "Unable to log in. Please try again.",
-            });
-        }
+        setErrors({
+          general: "Student ID or password is incorrect.",
+        });
       }
     } catch (error) {
       console.error("Login error:", error);
-
       setErrors({
-        general:
-          "Something went wrong. Please try again.",
+        general: "Something went wrong. Please try again.",
       });
     } finally {
       setLoading(false);
@@ -181,12 +182,12 @@ function Login() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-3 sm:p-6">
-      <div className="grid min-h-[650px] w-full max-w-6xl grid-cols-1 overflow-hidden rounded-2xl bg-surface shadow-elevated lg:grid-cols-2">
+      <div className="grid min-h-[650px] border border-border w-full max-w-6xl grid-cols-1 overflow-hidden rounded-2xl bg-surface shadow-elevated lg:grid-cols-2">
 
         {/* LEFT SIDE */}
 
         <div
-          className="relative min-h-[280px] bg-cover bg-center lg:min-h-[650px]"
+          className="relative  min-h-[280px] bg-cover bg-center lg:min-h-[650px]"
           style={{
             backgroundImage:
               "url('/WhatsApp Image 2026-10-28 at 9.23.42 AM(1).jpeg')",

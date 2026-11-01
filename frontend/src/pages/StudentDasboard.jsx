@@ -1,5 +1,3 @@
-
-
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import DashboardHeader from "../components/DashboardHeader";
@@ -9,7 +7,7 @@ import RecentAnnouncements from "../components/RecentAnnouncements";
 
 export default function StudentDashboard() {
   return (
-    <div className="min-h-screen bg-[#f5f8fa]">
+    <div className="min-h-screen bg-background">
 
       {/* Sidebar */}
       <Sidebar />
