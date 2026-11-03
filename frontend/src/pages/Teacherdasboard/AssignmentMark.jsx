@@ -13,36 +13,36 @@ import Sidebar2 from "../../components/Sidebar2";
 const initialAssignments = [
   {
     id: 1,
-    title: "Web Project 2",
-    course: "Web Development",
+    title: "Easy",
+    class: "Urdu",
     dueDate: "29 Apr 2025",
     status: "Pending",
   },
   {
     id: 2,
-    title: "Database Quiz",
-    course: "Database Systems",
+    title: "Hujja tul Wida",
+    class: "Sindhi",
     dueDate: "25 Apr 2025",
     status: "Completed",
   },
   {
     id: 3,
-    title: "UI Design Task",
-    course: "UI/UX Design",
+    title: "Sound",
+    class: "Physics",
     dueDate: "30 Apr 2025",
     status: "Pending",
   },
   {
     id: 4,
     title: "Final Project",
-    course: "Computer Science",
+    class: "Computer Science",
     dueDate: "05 May 2025",
     status: "Pending",
   },
   {
     id: 5,
     title: "English Essay",
-    course: "English Communication",
+    class: "English Communication",
     dueDate: "08 May 2025",
     status: "Completed",
   },
@@ -146,7 +146,7 @@ export default function AssignmentMark() {
 
   const [form, setForm] = useState({
     title: "",
-    course: "Web Development",
+    class: "Urdu",
     dueDate: "",
   });
 
@@ -174,7 +174,7 @@ export default function AssignmentMark() {
         assignment.title
           .toLowerCase()
           .includes(search.toLowerCase()) ||
-        assignment.course
+        assignment.class
           .toLowerCase()
           .includes(search.toLowerCase());
 
@@ -192,7 +192,7 @@ export default function AssignmentMark() {
     const newAssignment = {
       id: Date.now(),
       title: form.title.trim(),
-      course: form.course,
+      class: form.class,
       dueDate: new Date(
         `${form.dueDate}T12:00:00`
       ).toLocaleDateString("en-GB", {
@@ -210,7 +210,7 @@ export default function AssignmentMark() {
 
     setForm({
       title: "",
-      course: "Web Development",
+      class: "Urdu",
       dueDate: "",
     });
 
@@ -401,7 +401,7 @@ export default function AssignmentMark() {
                 <tr className="border-b border-border">
                   {[
                     "Title",
-                    "Course",
+                    "class",
                     "Due Date",
                     "Status",
                     "Actions",
@@ -427,7 +427,7 @@ export default function AssignmentMark() {
                     </td>
 
                     <td className="whitespace-nowrap px-5 py-4 text-xs text-muted">
-                      {assignment.course}
+                      {assignment.class}
                     </td>
 
                     <td className="whitespace-nowrap px-5 py-4 text-xs text-muted">
@@ -532,7 +532,7 @@ export default function AssignmentMark() {
               </h3>
 
               <p className="mt-1 text-xs text-muted">
-                Add a new assignment to your courses.
+                Add a new assignment to your classs.
               </p>
             </div>
 
@@ -571,22 +571,22 @@ export default function AssignmentMark() {
 
             <div>
               <label className="mb-1.5 block text-sm font-medium text-heading">
-                Course
+                class
               </label>
 
               <select
-                value={form.course}
+                value={form.class}
                 onChange={(event) =>
                   setForm({
                     ...form,
-                    course: event.target.value,
+                    class: event.target.value,
                   })
                 }
                 className={inputClass}
               >
-                <option>Web Development</option>
-                <option>Database Systems</option>
-                <option>UI/UX Design</option>
+                <option>Urdu</option>
+                <option>English</option>
+                <option>Sindhi</option>
                 <option>Computer Science</option>
                 <option>English Communication</option>
                 <option>Mathematics</option>
@@ -661,10 +661,10 @@ export default function AssignmentMark() {
 
           <div className="space-y-4">
             <div className="rounded-lg border border-border bg-background p-3">
-              <p className="text-xs text-muted">Course</p>
+              <p className="text-xs text-muted">class</p>
 
               <p className="mt-1 text-sm font-semibold text-heading">
-                {selectedAssignment.course}
+                {selectedAssignment.class}
               </p>
             </div>
 

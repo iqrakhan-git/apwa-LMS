@@ -83,9 +83,9 @@ const initialGrades = [
 ];
 
 const courses = [
-  { code: "CS-101", name: "Web Development" },
-  { code: "CS-102", name: "Database Systems" },
-  { code: "CS-103", name: "UI/UX Design" },
+  { code: "Eng-101", name: "Enlish" },
+  { code: "UR-102", name: "Urdu" },
+  { code: "M-103", name: "Math" },
 ];
 
 const ITEMS_PER_PAGE = 5;
@@ -294,7 +294,7 @@ function Grades() {
                 <p className="mt-1 text-xs text-muted">
                   {courses.find(
                     (course) => course.code === selectedCourse
-                  )?.name || "Selected Course"}
+                  )?.name || "Selected Class"}
                 </p>
               </div>
             </div>
@@ -318,15 +318,15 @@ function Grades() {
                   </th>
 
                   <th className="px-5 py-4 text-xs font-bold text-muted">
-                    Assignment 1
+                    English
                   </th>
 
                   <th className="px-5 py-4 text-xs font-bold text-muted">
-                    Quiz 1
+                    Urdu
                   </th>
 
                   <th className="px-5 py-4 text-xs font-bold text-muted">
-                    Project
+                    Math
                   </th>
 
                   <th className="px-5 py-4 text-xs font-bold text-muted">

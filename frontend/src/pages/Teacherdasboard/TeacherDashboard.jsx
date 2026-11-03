@@ -292,21 +292,21 @@ function AttendanceChart() {
 
 const upcomingClasses = [
   {
-    title: "Web Development",
+    title: "English",
     time: "09:00 AM - 10:00 AM",
     room: "Room 101",
     status: "Live",
     icon: Video,
   },
   {
-    title: "Database Systems",
+    title: "Urdu",
     time: "11:00 AM - 12:00 PM",
     room: "Room 102",
     status: "Upcoming",
     icon: BookOpen,
   },
   {
-    title: "UI/UX Design",
+    title: "Sindhi",
     time: "02:00 PM - 03:00 PM",
     room: "Room 104",
     status: "Upcoming",

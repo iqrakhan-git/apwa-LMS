@@ -20,14 +20,14 @@ const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const [profile, setProfile] = useState({
-    fullName: "Muhammad Ahmed",
+    fullName: "Iqra khan",
     studentId: "STU-2026-001",
     email: "ahmed@student.com",
     phone: "+92 300 1234567",
     dateOfBirth: "2005-05-15",
     gender: "Male",
     department: "Computer Science",
-    semester: "5th Semester",
+    semester: "10 class",
     enrollmentYear: "2024",
     address: "Hyderabad, Sindh, Pakistan",
   });
@@ -58,7 +58,7 @@ const MyProfile = () => {
   const academicFields = [
     { label: "Student ID", name: "studentId", icon: IdCard },
     { label: "Department", name: "department", icon: GraduationCap },
-    { label: "Current Semester", name: "semester", icon: BookOpen },
+    { label: "Currrent Class", name: "semester", icon: BookOpen },
     { label: "Enrollment Year", name: "enrollmentYear", icon: CalendarDays },
   ];
 
@@ -206,7 +206,7 @@ const MyProfile = () => {
 
                 <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
                   <p className="text-xs font-medium text-muted">
-                    Current Semester
+                    Currrent Class
                   </p>
                   <p className="mt-1 text-sm font-bold text-primary">
                     {profile.semester}

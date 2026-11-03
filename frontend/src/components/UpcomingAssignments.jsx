@@ -2,7 +2,7 @@ import { ClipboardList, ArrowUpRight } from "lucide-react";
 
 const assignments = [
   {
-    title: "Web Development Assignment",
+    title: "Computer Science",
     subject: "HTML, CSS & React",
     due: "Due: 28 Oct 2026",
     priority: "High",
@@ -10,16 +10,16 @@ const assignments = [
     badge: "bg-primary/10 text-primary",
   },
   {
-    title: "Database Project",
-    subject: "Database Management",
+    title: "Easy",
+    subject: "Urdu",
     due: "Due: 30 Oct 2026",
     priority: "Medium",
     color: "bg-primary-dark/10 text-primary-dark",
     badge: "bg-primary-dark/10 text-primary-dark",
   },
   {
-    title: "UI/UX Design Task",
-    subject: "Design Fundamentals",
+    title:"Sentance",
+    subject: "English",
     due: "Due: 02 Nov 2026",
     priority: "Low",
     color: "bg-secondary/10 text-secondary",

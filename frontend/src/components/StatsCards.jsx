@@ -8,7 +8,7 @@ import {
 const stats = [
   {
     title: "Enrolled Courses",
-    value: "5",
+    value: "50%",
     icon: BookOpen,
     iconColor: "text-primary",
     iconBg: "bg-primary/10",
@@ -17,7 +17,7 @@ const stats = [
   },
   {
     title: "Pending Assignments",
-    value: "3",
+    value: "60%",
     icon: ClipboardList,
     iconColor: "text-primary-dark",
     iconBg: "bg-primary-dark/10",
@@ -34,8 +34,8 @@ const stats = [
     border: "border-secondary/20",
   },
   {
-    title: "Overall GPA",
-    value: "3.8",
+    title: "Overall Grades",
+    value: "79%",
     icon: Award,
     iconColor: "text-primary",
     iconBg: "bg-accent/20",

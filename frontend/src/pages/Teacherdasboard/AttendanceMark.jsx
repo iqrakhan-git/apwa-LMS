@@ -62,10 +62,10 @@ const initialStudents = [
 
 // Attendance status styles
 const statusStyles = {
-  Present: "bg-primary/10 text-primary",
-  Absent: "bg-primary-dark/10 text-primary-dark",
+  Present: "bg-success/20 text-success",
+  Absent: "bg-danger/10 text-danger",
   Late: "bg-secondary/10 text-secondary",
-  Leave: "bg-accent/20 text-primary-dark",
+  Leave: "bg-amber-500/20 text-amber-500",
 };
 
 // Attendance status icons
@@ -85,7 +85,7 @@ function StatusBadge({ status }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${style}`}
+      className={`inline-flex  items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${style}`}
     >
       <Icon size={12} />
       {status || "Unknown"}
@@ -173,9 +173,9 @@ function AttendanceSummary({ students }) {
 
   const segments = [
     { name: "Present", color: "#7C3AED" },
-    { name: "Absent", color: "#5B21B6" },
+    { name: "Absent", color: "#f4742a" },
     { name: "Late", color: "#9333EA" },
-    { name: "Leave", color: "#C084FC" },
+    { name: "Leave", color: "#f8af1d" },
   ];
 
   let cumulative = 0;

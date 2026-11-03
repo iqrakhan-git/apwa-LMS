@@ -16,6 +16,10 @@
 
   --heading: #1E1B4B;
   --muted: #6B7280;
+
+  --success: #0fcd71;
+  --danger: #fa2747;
+  --yellow: #f4742a ;
 } 
 
 .dark {
@@ -33,7 +37,8 @@
   --muted: #A1A1AA;
 
   --success: #34D399;
-  --danger: #FB7185;
+  --danger: #ee465f;
+  --yellow: #f58a1f ;
 }  
 
 
@@ -50,6 +55,10 @@
 
   --color-heading: var(--heading);
   --color-muted: var(--muted);
+
+  --color-success: var(--success);
+  --color-yellow: var(--yellow);
+  --color-danger: var(--danger);
 } 
 
  

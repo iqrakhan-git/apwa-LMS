@@ -2,96 +2,78 @@ import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import {
-  GraduationCap,
-  TrendingUp,
-  BookOpen,
   Award,
-  ChevronDown,
   Download,
   Search,
 } from "lucide-react";
 
 const gradesData = [
   {
-    code: "CS-301",
-    subject: "Data Structures & Algorithms",
-    credit: 3,
-    marks: 92,
-    grade: "A+",
-    points: 4.0,
+    code: "ENG-301",
+    subject: "English ",
+    credit: 0,
+    marks: 40,
+    grade: "C",
+    Total: 100,
     status: "Excellent",
   },
   {
     code: "CS-302",
-    subject: "Database Management Systems",
+    subject: "Computer Science",
     credit: 3,
     marks: 87,
     grade: "A",
-    points: 4.0,
+    Total: 100,
     status: "Excellent",
   },
   {
-    code: "CS-303",
-    subject: "Operating Systems",
+    code: "SN-303",
+    subject: "Sindhi",
     credit: 3,
     marks: 82,
     grade: "A-",
-    points: 3.7,
+    Total: 100,
     status: "Very Good",
   },
   {
-    code: "CS-304",
-    subject: "Computer Networks",
+    code: "M-304",
+    subject: "Math",
     credit: 3,
     marks: 78,
     grade: "B+",
-    points: 3.3,
+    Total: 100,
     status: "Good",
   },
   {
-    code: "CS-305",
-    subject: "Software Engineering",
+    code: "PST-305",
+    subject: "Pakistan Stadies",
     credit: 3,
     marks: 90,
     grade: "A+",
-    points: 4.0,
+    Total: 100,
     status: "Excellent",
   },
   {
-    code: "CS-306",
-    subject: "Web Development",
+    code: "CH-306",
+    subject: "Chemistry",
     credit: 3,
     marks: 85,
     grade: "A",
-    points: 4.0,
+    Total: 100,
+    status: "Very Good",
+  },
+  {
+    code: "PHY-306",
+    subject: "Physics",
+    credit: 3,
+    marks: 85,
+    grade: "A",
+    Total:100 ,
     status: "Very Good",
   },
 ];
 
-const semesters = ["Fall 2026", "Spring 2026", "Fall 2025"];
-
-function SummaryCard({ icon: Icon, title, value, subtitle }) {
-  return (
-    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-medium text-muted">{title}</p>
-          <h2 className="mt-3 text-3xl font-bold text-heading">
-            {value}
-          </h2>
-          <p className="mt-2 text-xs text-muted">{subtitle}</p>
-        </div>
-
-        <div className="rounded-xl bg-primary/10 p-3 text-primary">
-          <Icon size={23} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Grades() {
-  const [semester, setSemester] = useState("Fall 2026");
   const [search, setSearch] = useState("");
 
   const filteredGrades = gradesData.filter((item) =>
@@ -105,22 +87,15 @@ export default function Grades() {
     0
   );
 
-  const averageMarks =
-    filteredGrades.length > 0
-      ? (
-          filteredGrades.reduce((total, item) => total + item.marks, 0) /
-          filteredGrades.length
-        ).toFixed(1)
-      : "0.0";
 
   const handleExport = () => {
     const headers = [
-      "Course Code",
+      "Class Code",
       "Subject",
       "Credits",
       "Marks",
       "Grade",
-      "Grade Points",
+      "Total Mark",
     ];
 
     const rows = filteredGrades.map((item) => [
@@ -129,7 +104,7 @@ export default function Grades() {
       item.credit,
       item.marks,
       item.grade,
-      item.points,
+      item.Total,
     ]);
 
     const csv = [headers, ...rows]
@@ -188,68 +163,6 @@ export default function Grades() {
             </button>
           </div>
 
-          {/* Semester Selector */}
-          <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="font-semibold text-heading">
-                Academic Overview
-              </h2>
-              <p className="mt-1 text-sm text-muted">
-                Select a semester to review your grades.
-              </p>
-            </div>
-
-            <div className="relative">
-              <select
-                value={semester}
-                onChange={(e) => setSemester(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-border bg-card py-3 pl-4 pr-10 text-sm font-medium text-heading outline-none focus:border-primary sm:w-48"
-              >
-                {semesters.map((item) => (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-
-              <ChevronDown
-                size={17}
-                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted"
-              />
-            </div>
-          </div>
-
-          {/* Summary Cards */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <SummaryCard
-              icon={GraduationCap}
-              title="Current CGPA"
-              value="3.85"
-              subtitle="Out of 4.00"
-            />
-
-            <SummaryCard
-              icon={TrendingUp}
-              title="Semester GPA"
-              value="3.83"
-              subtitle={semester}
-            />
-
-            <SummaryCard
-              icon={BookOpen}
-              title="Total Credits"
-              value="18"
-              subtitle="Credits attempted"
-            />
-
-            <SummaryCard
-              icon={Award}
-              title="Average Marks"
-              value={`${averageMarks}%`}
-              subtitle="Across displayed courses"
-            />
-          </div>
-
           {/* Performance Banner */}
           <div className="relative overflow-hidden rounded-2xl bg-sidebar p-6 text-white sm:p-8">
             <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -289,7 +202,7 @@ export default function Grades() {
                   Subject-wise Grades
                 </h2>
                 <p className="mt-1 text-sm text-muted">
-                  Your marks, credits and grade points.
+                  Your marks, credits and Total Marks.
                 </p>
               </div>
 
@@ -312,7 +225,7 @@ export default function Grades() {
               <table className="w-full min-w-[850px] text-left text-sm">
                 <thead className="bg-primary/5 text-xs uppercase tracking-wide text-muted">
                   <tr>
-                    <th className="px-5 py-4 font-semibold">Course</th>
+                    <th className="px-5 py-4 font-semibold">Clases</th>
                     <th className="px-5 py-4 font-semibold">Subject Name</th>
                     <th className="px-5 py-4 text-center font-semibold">
                       Credits
@@ -324,7 +237,7 @@ export default function Grades() {
                       Grade
                     </th>
                     <th className="px-5 py-4 text-center font-semibold">
-                      Grade Points
+                      Total Marks
                     </th>
                     <th className="px-5 py-4 font-semibold">Performance</th>
                   </tr>
@@ -349,7 +262,7 @@ export default function Grades() {
                       </td>
 
                       <td className="px-5 py-5 text-center font-semibold text-heading">
-                        {item.marks}%
+                        {item.marks}
                       </td>
 
                       <td className="px-5 py-5 text-center">
@@ -359,7 +272,7 @@ export default function Grades() {
                       </td>
 
                       <td className="px-5 py-5 text-center font-medium text-heading">
-                        {item.points.toFixed(1)}
+                        {item.Total}
                       </td>
 
                       <td className="px-5 py-5">

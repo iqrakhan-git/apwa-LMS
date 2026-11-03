@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 const initialAssignments = [
   {
     id: 1,
-    title: "Web Development Assignment",
+    title: "Computer Science",
     course: "CS-101",
     dueDate: "2025-04-25",
     priority: "High",
@@ -16,8 +16,8 @@ const initialAssignments = [
   },
   {
     id: 2,
-    title: "Database Project",
-    course: "CS-102",
+    title: "Urdu Test",
+    course: "UR-102",
     dueDate: "2025-04-26",
     priority: "Medium",
     status: "Pending",
@@ -25,8 +25,8 @@ const initialAssignments = [
   },
   {
     id: 3,
-    title: "UI/UX Design Task",
-    course: "CS-103",
+    title: "English Sentance",
+    course: "ENG-103",
     dueDate: "2025-04-30",
     priority: "Low",
     status: "Pending",
@@ -53,9 +53,9 @@ const initialAssignments = [
 ];
 
 const priorityStyles = {
-  High: "bg-primary/10 text-primary-dark",
-  Medium: "bg-secondary/10 text-secondary",
-  Low: "bg-accent/20 text-primary-dark",
+  High: "bg-danger/10 text-danger",
+  Medium: "bg-yellow/10 text-yellow",
+  Low: "bg-success/20 text-success",
 };
 
 const iconStyles = [
@@ -80,7 +80,7 @@ function formatDate(dateString) {
 }
 
 function AssignmentIcon({ index }) {
-  const symbols = ["WD", "DB", "UI", "CS", "EN"];
+  const symbols = ["CS", "UT", "EN", "CS", "EN"];
 
   return (
     <div

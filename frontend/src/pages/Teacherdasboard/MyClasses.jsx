@@ -15,7 +15,7 @@ import {
 import Sidebar2 from "../../components/Sidebar2";
 
 // Course data
-const initialCourses = [
+const initialClass = [
   {
     id: 1,
     title: "Urdu",
@@ -85,7 +85,7 @@ const initialCourses = [
 ];
 
 export default function MyClasses() {
-  const [courses, setCourses] = useState(initialCourses);
+  const [Class, setClass] = useState(initialClass);
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -97,7 +97,7 @@ export default function MyClasses() {
     description: "",
   });
 
-  const filteredCourses = courses.filter((course) => {
+  const filteredClass = Class.filter((course) => {
     const query = search.toLowerCase();
 
     return (
@@ -126,7 +126,7 @@ export default function MyClasses() {
       bg: "bg-primary/10",
     };
 
-    setCourses((previous) => [...previous, addedCourse]);
+    setClass((previous) => [...previous, addedCourse]);
 
     setNewCourse({
       title: "",
@@ -146,11 +146,11 @@ export default function MyClasses() {
         <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-2xl font-extrabold tracking-tight text-heading sm:text-3xl">
-              My Courses
+              My Class
             </h1>
 
             <p className="mt-2 text-sm text-muted">
-              Manage your assigned courses and classes.
+              Manage your assigned Class and classes.
             </p>
           </div>
 
@@ -176,7 +176,7 @@ export default function MyClasses() {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search courses..."
+              placeholder="Search Class..."
               className="w-full rounded-xl border border-border bg-card py-3 pl-11 pr-4 text-sm text-heading outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
             />
           </div>
@@ -184,16 +184,16 @@ export default function MyClasses() {
           <p className="text-sm text-muted">
             Showing{" "}
             <span className="font-bold text-heading">
-              {filteredCourses.length}
+              {filteredClass.length}
             </span>{" "}
-            courses
+            Class
           </p>
         </div>
 
         {/* Course Cards */}
-        {filteredCourses.length > 0 ? (
+        {filteredClass.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {filteredCourses.map((course) => {
+            {filteredClass.map((course) => {
               const Icon = course.icon;
 
               return (
@@ -260,7 +260,7 @@ export default function MyClasses() {
             </div>
 
             <h3 className="mt-4 text-lg font-bold text-heading">
-              No courses found
+              No Class found
             </h3>
 
             <p className="mt-2 text-sm text-muted">

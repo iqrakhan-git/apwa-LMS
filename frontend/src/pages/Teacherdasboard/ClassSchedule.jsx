@@ -14,49 +14,49 @@ const initialSchedule = [
   {
     day: "Monday",
     time: "09:00 - 10:00",
-    course: "Web Development",
+    class: "Computer Science",
     room: "101",
     color: "bg-emerald-500",
   },
   {
     day: "Monday",
     time: "11:00 - 12:00",
-    course: "Database Systems",
+    class: "Urdu",
     room: "102",
     color: "bg-sky-500",
   },
   {
     day: "Tuesday",
     time: "09:00 - 10:00",
-    course: "UI/UX Design",
+    class: "Sindhi",
     room: "104",
     color: "bg-amber-500",
   },
   {
     day: "Tuesday",
     time: "02:00 - 03:00",
-    course: "Computer Science",
+    class: "Computer Science",
     room: "101",
     color: "bg-blue-500",
   },
   {
     day: "Wednesday",
     time: "09:00 - 10:00",
-    course: "English Communication",
+    class: "English Communication",
     room: "103",
     color: "bg-pink-500",
   },
   {
     day: "Thursday",
     time: "11:00 - 12:00",
-    course: "Mathematics",
+    class: "Mathematics",
     room: "105",
     color: "bg-red-500",
   },
   {
     day: "Friday",
     time: "09:00 - 10:00",
-    course: "Web Development",
+    class: "Computer Science",
     room: "101",
     color: "bg-primary",
   },
@@ -182,11 +182,11 @@ function ClassSchedule() {
 
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs font-medium text-muted">
-              Courses
+              classs
             </p>
 
             <h3 className="mt-2 text-2xl font-extrabold text-heading">
-              {new Set(initialSchedule.map((item) => item.course)).size}
+              {new Set(initialSchedule.map((item) => item.class)).size}
             </h3>
           </div>
         </div>
@@ -244,7 +244,7 @@ function ClassSchedule() {
                   </th>
 
                   <th className="px-5 py-4 text-xs font-bold text-muted">
-                    Course
+                    class
                   </th>
 
                   <th className="px-5 py-4 text-xs font-bold text-muted">
@@ -266,7 +266,7 @@ function ClassSchedule() {
 
                   return (
                     <tr
-                      key={`${item.day}-${item.time}-${item.course}`}
+                      key={`${item.day}-${item.time}-${item.class}`}
                       className="transition hover:bg-primary/[0.035]"
                     >
                       {/* Day */}
@@ -292,7 +292,7 @@ function ClassSchedule() {
                         </div>
                       </td>
 
-                      {/* Course */}
+                      {/* class */}
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2.5">
                           <span
@@ -300,7 +300,7 @@ function ClassSchedule() {
                           />
 
                           <span className="whitespace-nowrap text-sm font-medium text-heading">
-                            {item.course}
+                            {item.class}
                           </span>
                         </div>
                       </td>
@@ -360,20 +360,20 @@ function ClassSchedule() {
           </div>
         </div>
 
-        {/* Course Legend */}
+        {/* class Legend */}
         <div className="mt-5 rounded-2xl border border-border bg-card p-5">
           <h3 className="mb-4 text-sm font-bold text-heading">
-            Course Legend
+            class Legend
           </h3>
 
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             {[
               ...new Map(
-                initialSchedule.map((item) => [item.course, item])
+                initialSchedule.map((item) => [item.class, item])
               ).values(),
             ].map((item) => (
               <div
-                key={item.course}
+                key={item.class}
                 className="flex items-center gap-2"
               >
                 <span
@@ -381,7 +381,7 @@ function ClassSchedule() {
                 />
 
                 <span className="text-xs text-muted">
-                  {item.course}
+                  {item.class}
                 </span>
               </div>
             ))}
@@ -434,7 +434,7 @@ function ClassSchedule() {
               </div>
 
               <h3 className="text-lg font-bold text-heading">
-                {selectedClass.course}
+                {selectedClass.class}
               </h3>
             </div>
 
