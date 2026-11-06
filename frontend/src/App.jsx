@@ -16,6 +16,7 @@ import Assignments from "./pages/Studentdasboardpages/Assignments"
 import Welcome from "./pages/Welcome";
 import TeacherDashboard from './pages/Teacherdasboard/TeacherDashboard'
 import AssignmentMark from "./pages/Teacherdasboard/AssignmentMark"
+import AIAssistant from "./pages/AIAssistant"
 import Courses from "./pages/Studentdasboardpages/Courses"
 import ClassSchedule from "./pages/Teacherdasboard/ClassSchedule"
 import Profile from "./pages/Teacherdasboard/Profile"
@@ -33,6 +34,7 @@ function App() {
         <Route path="/dashboard" element={<StudentDashboard/>} />
         <Route path="/teacher/dashboard" element={<TeacherDashboard/>} />
         <Route path="/attendance" element={<Attendance/>} />
+        <Route path="/ai-assistant" element={<AIAssistant/>} />
         <Route path="/teacher/attendance" element={<AttendanceMark/>} />
         <Route path="/assignments" element={<Assignments/>} />
         <Route path="/teacher/assignments" element={<AssignmentMark/>} />

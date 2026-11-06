@@ -4,6 +4,7 @@ import DashboardHeader from "../components/DashboardHeader";
 import StatsCards from "../components/StatsCards";
 import UpcomingAssignments from "../components/UpcomingAssignments";
 import RecentAnnouncements from "../components/RecentAnnouncements";
+import AIAssistant from "./AIAssistant";
 
 export default function StudentDashboard() {
   return (
@@ -35,7 +36,7 @@ export default function StudentDashboard() {
 
         </div>
       </main>
-
+       <AIAssistant/>
     </div>
   );
 }

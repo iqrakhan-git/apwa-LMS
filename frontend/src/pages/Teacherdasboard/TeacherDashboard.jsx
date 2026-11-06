@@ -19,6 +19,7 @@ import {
   Leaf,
 } from "lucide-react";
 import Sidebar2 from "../../components/Sidebar2";
+import AIAssistant from "../AIAssistant";
 
 /* =========================
    TOP NAVBAR
@@ -570,6 +571,7 @@ export default function TeacherDashboard() {
           </footer>
         </div>
       </main>
+      <AIAssistant/>
     </div>
   );
 }
