@@ -360,7 +360,7 @@ export default function Attendance() {
 
       <Sidebar />
 
-      <main className="min-h-screen pl-64">
+      <main className="min-h-screen md:pl-64">
 
         <Navbar />
 

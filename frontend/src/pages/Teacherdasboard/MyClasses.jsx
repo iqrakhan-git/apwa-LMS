@@ -141,7 +141,7 @@ export default function MyClasses() {
   return (
     <div className="">
        <Sidebar2/>
-      <div className="min-h-screen bg-background  pl-70 py-8 font-sans text-heading pr-8">
+      <div className="min-h-screen bg-background pl-6 md:pl-70 py-8 font-sans text-heading pr-8">
         {/* Page Header */}
         <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <div>

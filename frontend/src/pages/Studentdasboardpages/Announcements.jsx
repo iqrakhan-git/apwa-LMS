@@ -218,7 +218,7 @@ export default function Announcements() {
   };
 
   return (
-    <div className="ml-64 min-h-screen bg-background text-heading md:flex">
+    <div className="md:ml-64 min-h-screen bg-background text-heading md:flex">
       <Sidebar />
 
       <div className="min-w-0 flex-1">

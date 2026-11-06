@@ -197,7 +197,7 @@ function Grades() {
   return (
     <div className="min-h-screen bg-background px-4 py-7 font-sans text-heading sm:px-7 lg:px-10">
       <Sidebar2/>
-      <div className="pl-65 mx-auto max-w-[1500px]">
+      <div className="md:pl-65 pl-1 mx-auto max-w-[1500px]">
 
         {/* Header */}
         <div className="mb-7 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">

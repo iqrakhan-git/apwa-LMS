@@ -530,7 +530,7 @@ export default function TeacherDashboard() {
 
       <Navbar />
 
-      <main className="ml-64 min-h-screen px-5 pb-10 pt-[108px] sm:px-8 lg:px-10">
+      <main className="ml-4 md:ml-64 min-h-screen px-5 pb-10 pt-[108px] sm:px-8 lg:px-10">
         <div className="mx-auto max-w-[1500px]">
           <WelcomeHeader />
 

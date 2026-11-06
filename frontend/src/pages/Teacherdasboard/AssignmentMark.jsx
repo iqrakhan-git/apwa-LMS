@@ -254,7 +254,7 @@ export default function AssignmentMark() {
       <Sidebar2 />
       <Navbar />
 
-      <main className="ml-65 min-h-screen px-7 pb-10 pt-24">
+      <main className="md:ml-65 ml-4 min-h-screen px-7 pb-10 pt-24">
         {/* Page Heading */}
         <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
           <div>

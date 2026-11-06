@@ -103,7 +103,7 @@ function ClassSchedule() {
   return (
     <div className="min-h-screen bg-background px-4 py-6 font-sans text-heading sm:px-7 lg:px-10">
       <Sidebar2/>
-      <div className="mx-auto max-w-[1500px] ml-63">
+      <div className="mx-auto max-w-[1500px] md:ml-63 ml-2">
         {/* Page Header */}
         <div className="mb-6 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <div>

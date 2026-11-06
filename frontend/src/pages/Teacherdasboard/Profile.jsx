@@ -102,7 +102,7 @@ const Profile = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar />
 
-      <div className="min-w-0 ml-64 flex-1">
+      <div className="min-w-0 md:ml-64 ml-2 flex-1">
         <Navbar />
 
         <main className=" space-y-7 p-4 sm:p-6 lg:p-8">

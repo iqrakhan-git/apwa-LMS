@@ -492,13 +492,13 @@ export default function Students() {
 
         {/* MAIN CONTENT */}
 
-        <main className=" ml-65 flex-1">
+        <main className="min-w-0 w-full flex-1 md:ml-64">
 
           {/* TOP NAVBAR */}
 
-          <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-border bg-card px-4 sm:px-6 lg:px-8">
+          <header className="sticky top-0 z-20 flex min-h-16 items-center justify-between gap-3 border-b border-border bg-card px-3 py-3 sm:h-20 sm:px-6 lg:px-8">
             <div>
-              <h2 className="text-xl font-bold text-heading">
+              <h2 className="text-lg font-bold text-heading sm:text-xl">
                 Students
               </h2>
 
@@ -537,13 +537,13 @@ export default function Students() {
 
           {/* PAGE BODY */}
 
-          <section className="p-4 sm:p-6 lg:p-8">
+          <section className="w-full min-w-0 p-3 sm:p-6 lg:p-8">
 
             {/* PAGE HEADING */}
 
             <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
               <div>
-                <h1 className="text-2xl font-bold text-heading">
+                <h1 className="text-xl font-bold text-heading sm:text-2xl">
                   Student Management
                 </h1>
 
@@ -558,7 +558,7 @@ export default function Students() {
                   setStudentForm(emptyForm);
                   setShowSignup(true);
                 }}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark sm:w-auto"
               >
                 <Plus size={19} />
                 Add Student
@@ -567,7 +567,7 @@ export default function Students() {
 
             {/* STATISTICS */}
 
-            <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="mb-7 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
 
               {/* Total Students */}
 
@@ -672,7 +672,7 @@ export default function Students() {
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="flex min-w-0 flex-col gap-3 sm:flex-row">
 
                   {/* Search */}
 
@@ -702,7 +702,7 @@ export default function Students() {
                       setSelectedClass(event.target.value);
                       setCurrentPage(1);
                     }}
-                    className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
+                    className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100 sm:w-auto"
                   >
                     <option value="All Classes">
                       All Classes
@@ -722,7 +722,7 @@ export default function Students() {
 
               {/* TABLE */}
 
-              <div className="overflow-x-auto">
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full min-w-[760px] text-left">
 
                   <thead className="bg-background">
@@ -925,6 +925,102 @@ export default function Students() {
                 </table>
               </div>
 
+              {/* MOBILE STUDENT CARDS */}
+              <div className="space-y-3 p-3 md:hidden">
+                {loading && (
+                  <p className="py-10 text-center text-sm text-muted">
+                    Loading students from Firebase...
+                  </p>
+                )}
+
+                {!loading && visibleStudents.length === 0 && (
+                  <div className="py-10 text-center">
+                    <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-purple-50 text-primary">
+                      <Users size={26} />
+                    </div>
+                    <h4 className="font-semibold text-heading">No students found</h4>
+                    <p className="mt-1 text-sm text-muted">
+                      Add a student or change your search filters.
+                    </p>
+                  </div>
+                )}
+
+                {!loading && visibleStudents.map((student) => (
+                  <article
+                    key={`mobile-${student.id}`}
+                    className="relative rounded-xl border border-border bg-background p-4"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-purple-100 text-sm font-bold text-primary-dark">
+                          {student.name
+                            .split(" ")
+                            .map((part) => part[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-semibold text-heading">
+                            {student.name}
+                          </p>
+                          <p className="mt-1 break-all text-xs text-muted">
+                            {student.email}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="relative shrink-0">
+                        <button
+                          type="button"
+                          aria-label={`Actions for ${student.name}`}
+                          onClick={() => setActiveMenu(activeMenu === student.id ? null : student.id)}
+                          className="rounded-lg p-2 text-muted transition hover:bg-card hover:text-heading"
+                        >
+                          <MoreVertical size={19} />
+                        </button>
+                        {activeMenu === student.id && (
+                          <div className="absolute right-0 top-10 z-30 w-44 rounded-xl border border-border bg-card p-1.5 text-left shadow-xl">
+                            <button
+                              type="button"
+                              onClick={() => openStudentDetails(student)}
+                              className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-heading transition hover:bg-purple-50 hover:text-primary"
+                            >
+                              <Eye size={16} /> View Details
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => deleteStudent(student.id)}
+                              className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-red-600 transition hover:bg-red-50"
+                            >
+                              <Trash2 size={16} /> Delete Student
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-3 border-t border-border pt-3">
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-muted">Student ID</p>
+                        <p className="mt-1 break-all text-sm font-semibold text-heading">{student.id}</p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-muted">Class</p>
+                        <p className="mt-1 text-sm font-semibold text-heading">{student.class}</p>
+                      </div>
+                      <div className="col-span-2">
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-muted">Status</p>
+                        <span className={`mt-1 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${student.status === "Active" ? "bg-purple-50 text-primary" : "bg-slate-100 text-slate-600"}`}>
+                          <span className={`h-1.5 w-1.5 rounded-full ${student.status === "Active" ? "bg-accent" : "bg-slate-400"}`} />
+                          {student.status}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
               {/* PAGINATION */}
 
               <div className="flex flex-col gap-4 border-t border-border px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
@@ -941,7 +1037,7 @@ export default function Students() {
                   of {filteredStudents.length} students
                 </p>
 
-                <div className="flex items-center gap-2">
+                <div className="flex max-w-full flex-wrap items-center gap-2">
                   <button
                     type="button"
                     disabled={safeCurrentPage <= 1}
@@ -1007,7 +1103,7 @@ export default function Students() {
             }
           }}
         >
-          <div className="my-6 w-full max-w-lg overflow-hidden rounded-2xl bg-card shadow-2xl">
+          <div className="my-4 max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl bg-card shadow-2xl sm:my-6">
 
             {/* Modal Header */}
 
@@ -1036,7 +1132,7 @@ export default function Students() {
 
             <form
               onSubmit={addStudent}
-              className="space-y-5 p-6"
+              className="space-y-4 p-4 sm:space-y-5 sm:p-6"
             >
 
               {/* Name */}
@@ -1165,7 +1261,7 @@ export default function Students() {
 
               {/* Buttons */}
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row">
                 <button
                   type="button"
                   onClick={() => {
@@ -1199,7 +1295,7 @@ export default function Students() {
 
       {showDetails && selectedStudent && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/50 p-3 backdrop-blur-sm sm:p-4"
           onClick={(event) => {
             if (event.target === event.currentTarget) {
               setShowDetails(false);
@@ -1207,7 +1303,7 @@ export default function Students() {
             }
           }}
         >
-          <div className="w-full max-w-md overflow-hidden rounded-2xl bg-card shadow-2xl">
+          <div className="my-auto w-full max-w-md overflow-hidden rounded-2xl bg-card shadow-2xl">
 
             {/* Header */}
 
@@ -1231,7 +1327,7 @@ export default function Students() {
 
             {/* Student Profile */}
 
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="flex flex-col items-center border-b border-border pb-6 text-center">
                 <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-purple-100 text-2xl font-bold text-primary-dark">
                   {selectedStudent.name

@@ -128,7 +128,7 @@ export default function Grades() {
   };
 
   return (
-    <div className="min-h-screen ml-63 bg-background md:flex">
+    <div className="min-h-screen md:ml-63 bg-background md:flex">
       {/* Sidebar */}
       <Sidebar />
 

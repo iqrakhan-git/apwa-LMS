@@ -198,7 +198,7 @@ export default function Settings() {
     <div className="min-h-screen bg-background md:flex">
       <Sidebar />
 
-      <div className="ml-64 min-w-0 flex-1">
+      <div className="md:ml-64 min-w-0 flex-1">
         <Navbar />
 
         <main className="mx-auto max-w-[1500px] space-y-7 p-4 sm:p-6 lg:p-8">

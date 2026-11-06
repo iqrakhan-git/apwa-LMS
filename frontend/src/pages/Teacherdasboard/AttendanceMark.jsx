@@ -323,7 +323,7 @@ export default function AttendanceMark() {
 
        <Navbar />
 
-      <main className="ml-62 min-h-screen px-7 pb-10 pt-24 bg-background ">
+      <main className="md:ml-62 min-h-screen px-7 pb-10 pt-24 bg-background ">
        
         {/* Heading and controls */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">

@@ -281,7 +281,7 @@ export default function Assignments() {
     <div className="min-h-screen bg-background">
       <Sidebar />
 
-      <main className="min-h-screen pl-64">
+      <main className="min-h-screen md:pl-64">
         <Navbar />
 
         <div className="mx-auto max-w-[1600px] p-5 sm:p-7 lg:p-8">
