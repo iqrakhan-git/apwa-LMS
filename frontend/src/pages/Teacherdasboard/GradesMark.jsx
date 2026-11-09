@@ -155,9 +155,9 @@ function Grades() {
   const exportCSV = () => {
     const headers = [
       "Student Name",
-      "Assignment 1",
-      "Quiz 1",
-      "Project",
+      "English",
+      "Urdu",
+      "Math",
       "Final Grade",
     ];
 
@@ -486,7 +486,7 @@ function Grades() {
             <span className="font-semibold text-heading">
               Grading information:
             </span>{" "}
-            Final grades are calculated as the average of Assignment 1,
+            Final grades are calculated as the average of English,
             Quiz 1, and Project scores. Click a final grade to edit the
             student's scores.
           </p>
@@ -528,7 +528,7 @@ function Grades() {
 
             <form onSubmit={updateGrade} className="space-y-5">
               {[
-                { key: "assignment", label: "Assignment 1" },
+                { key: "assignment", label: "English" },
                 { key: "quiz", label: "Quiz 1" },
                 { key: "project", label: "Project" },
               ].map((field) => (
