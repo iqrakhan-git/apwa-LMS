@@ -95,53 +95,6 @@ function StatusBadge({ status }) {
 
 // Sidebar component
 
-
-// Navbar component
-function Navbar() {
-  return (
-    <header className="fixed left-56 right-0 top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-card/95 px-7 backdrop-blur">
-      <div className="flex w-72 items-center gap-2 rounded-lg bg-background px-3 py-2">
-        <Search size={16} className="text-muted" />
-
-        <input
-          type="text"
-          placeholder="Search anything..."
-          className="w-full bg-transparent text-sm text-heading outline-none"
-        />
-      </div>
-
-      <div className="flex items-center gap-4">
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative text-muted"
-        >
-          <Bell size={18} />
-
-          <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-primary" />
-        </button>
-
-        <div className="flex items-center gap-2">
-          <img
-            src="https://i.pravatar.cc/100?img=47"
-            alt="Teacher profile"
-            className="h-9 w-9 rounded-full object-cover"
-          />
-
-          <div className="hidden sm:block">
-            <p className="text-xs font-semibold text-heading">
-              Ms. Ayesha Khan
-            </p>
-            <p className="text-[10px] text-muted">
-              Teacher
-            </p>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
-
 // Attendance summary component
 function AttendanceSummary({ students }) {
   const counts = useMemo(() => {
@@ -321,7 +274,6 @@ export default function AttendanceMark() {
     <div className="min-h-screen ">
       <Sidebar2 />
 
-       <Navbar />
 
       <main className="md:ml-62 min-h-screen px-7 pb-10 pt-24 bg-background ">
        

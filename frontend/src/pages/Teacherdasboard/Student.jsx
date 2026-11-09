@@ -493,48 +493,6 @@ export default function Students() {
         {/* MAIN CONTENT */}
 
         <main className="min-w-0 w-full flex-1 md:ml-64">
-
-          {/* TOP NAVBAR */}
-
-          <header className="sticky top-0 z-20 flex min-h-16 items-center justify-between gap-3 border-b border-border bg-card px-3 py-3 sm:h-20 sm:px-6 lg:px-8">
-            <div>
-              <h2 className="text-lg font-bold text-heading sm:text-xl">
-                Students
-              </h2>
-
-              <p className="mt-1 hidden text-sm text-muted sm:block">
-                Manage and monitor your students
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                aria-label="Notifications"
-                className="relative rounded-xl border border-border p-2.5 text-muted transition hover:bg-background"
-              >
-                <Bell size={20} />
-                <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-accent" />
-              </button>
-
-              <div className="flex items-center gap-3 border-l border-border pl-3 sm:pl-5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 font-bold text-primary-dark">
-                  T
-                </div>
-
-                <div className="hidden sm:block">
-                  <p className="text-sm font-semibold text-heading">
-                    Teacher
-                  </p>
-
-                  <p className="text-xs text-muted">
-                    Administrator
-                  </p>
-                </div>
-              </div>
-            </div>
-          </header>
-
           {/* PAGE BODY */}
 
           <section className="w-full min-w-0 p-3 sm:p-6 lg:p-8">

@@ -1,5 +1,4 @@
 import Sidebar from "../../components/Sidebar2";
-import Navbar from "../../components/Navbar";
 import { useState } from "react";
 import {
   UserRound,
@@ -103,7 +102,6 @@ const Profile = () => {
       <Sidebar />
 
       <div className="min-w-0 md:ml-64 ml-2 flex-1">
-        <Navbar />
 
         <main className=" space-y-7 p-4 sm:p-6 lg:p-8">
 

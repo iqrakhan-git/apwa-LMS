@@ -487,7 +487,7 @@ function Grades() {
               Grading information:
             </span>{" "}
             Final grades are calculated as the average of English,
-            Quiz 1, and Project scores. Click a final grade to edit the
+            Urdu, and Project scores. Click a final grade to edit the
             student's scores.
           </p>
         </div>
@@ -529,8 +529,8 @@ function Grades() {
             <form onSubmit={updateGrade} className="space-y-5">
               {[
                 { key: "assignment", label: "English" },
-                { key: "quiz", label: "Quiz 1" },
-                { key: "project", label: "Project" },
+                { key: "quiz", label: "Urdu" },
+                { key: "project", label: "Math" },
               ].map((field) => (
                 <div key={field.key}>
                   <label
