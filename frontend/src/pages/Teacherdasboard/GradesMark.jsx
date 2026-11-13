@@ -12,7 +12,7 @@ import {
 const initialGrades = [
   {
     id: 1,
-    name: "Ayesha Ali",
+    name: "Iqra khan",
     assignment: 90,
     quiz: 85,
     project: 92,

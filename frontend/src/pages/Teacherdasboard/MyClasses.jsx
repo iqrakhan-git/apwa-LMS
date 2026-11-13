@@ -71,17 +71,7 @@ const initialClass = [
     description:
       "Improve written communication, grammar and speaking skills.",
   },
-  {
-    id: 6,
-    title: "Mathematics",
-    code: "MTH-101",
-    students: 16,
-    icon: Calculator,
-    color: "text-green-600",
-    bg: "bg-green-100",
-    description:
-      "Learn mathematical concepts, problem-solving and calculations.",
-  },
+ 
 ];
 
 export default function MyClasses() {

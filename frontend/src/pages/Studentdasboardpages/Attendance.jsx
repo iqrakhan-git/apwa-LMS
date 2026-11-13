@@ -23,6 +23,9 @@ const attendanceData = {
     { day: 2, status: "Present" },
     { day: 4, status: "Present" },
     { day: 6, status: "Absent" },
+     { day: 8, status: "Present" },
+    { day: 10, status: "Present" },
+    { day: 13, status: "Absent" },
   ],
 
   "Oct 2026": [

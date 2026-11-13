@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import {
- 
   Search,
   Bell,
   CheckCircle2,
@@ -18,7 +17,7 @@ import Sidebar2 from "../../components/Sidebar2";
 const initialStudents = [
   {
     id: 1,
-    name: "Ayesha Ali",
+    name: "Iqra khan",
     class: "CS-101",
     status: "Present",
     remarks: "",

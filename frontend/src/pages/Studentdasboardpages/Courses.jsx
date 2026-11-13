@@ -21,54 +21,7 @@ import Navbar from "../../components/Navbar";
 
 // Subject data with chapters
 const courses = [
-  {
-    title: "English",
-    code: "ENG-101",
-    progress: 75,
-    icon: Languages,
-    iconColor: "text-rose-600",
-    iconBg: "bg-rose-100 dark:bg-rose-500/15",
-    chapters: [
-      {
-        number: 1,
-        title: "Parts of Speech",
-        description:
-          "Learn nouns, pronouns, verbs, adjectives, adverbs, prepositions, conjunctions and interjections.",
-      },
-      {
-        number: 2,
-        title: "Tenses",
-        description:
-          "Understand present, past and future tenses with examples and exercises.",
-      },
-      {
-        number: 3,
-        title: "Active and Passive Voice",
-        description:
-          "Learn how to convert sentences from active voice to passive voice.",
-      },
-      {
-        number: 4,
-        title: "Direct and Indirect Speech",
-        description:
-          "Learn the rules for changing direct speech into indirect speech.",
-      },
-      {
-        number: 5,
-        title: "Essay Writing",
-        description:
-          "Learn essay structure, paragraph writing and how to organize ideas.",
-      },
-      {
-        number: 6,
-        title: "Comprehension",
-        description:
-          "Practice reading passages and answering questions to improve understanding.",
-      },
-    ],
-  },
-
-  {
+   {
     title: "Urdu",
     code: "UR-101",
     progress: 60,
@@ -108,8 +61,7 @@ const courses = [
       },
     ],
   },
-
-  {
+   {
     title: "Sindhi",
     code: "SHI-103",
     progress: 40,
@@ -149,6 +101,55 @@ const courses = [
       },
     ],
   },
+  
+   {
+    title: "Pakistan Studies",
+    code: "PST-101",
+    progress: 55,
+    icon: Earth,
+    iconColor: "text-purple-600",
+    iconBg: "bg-purple-100 dark:bg-purple-500/15",
+    chapters: [
+      {
+        number: 1,
+        title: "Ideology of Pakistan",
+        description:
+          "Learn about the ideology of Pakistan and its historical background.",
+      },
+      {
+        number: 2,
+        title: "Pakistan Movement",
+        description:
+          "Study the major events and personalities of the Pakistan Movement.",
+      },
+      {
+        number: 3,
+        title: "Creation of Pakistan",
+        description:
+          "Understand the events surrounding the establishment of Pakistan in 1947.",
+      },
+      {
+        number: 4,
+        title: "Constitution of Pakistan",
+        description:
+          "Explore constitutional development and important constitutional principles.",
+      },
+      {
+        number: 5,
+        title: "Geography of Pakistan",
+        description:
+          "Learn about Pakistan's provinces, mountains, rivers and natural resources.",
+      },
+      {
+        number: 6,
+        title: "Culture and Heritage",
+        description:
+          "Explore the cultures, languages, traditions and heritage of Pakistan.",
+      },
+    ],
+  },
+ 
+ 
 
   {
     title: "Computer Science",
@@ -210,48 +211,48 @@ const courses = [
   },
 
   {
-    title: "Pakistan Studies",
-    code: "PST-101",
-    progress: 55,
-    icon: Earth,
-    iconColor: "text-purple-600",
-    iconBg: "bg-purple-100 dark:bg-purple-500/15",
+    title: "English",
+    code: "ENG-101",
+    progress: 75,
+    icon: Languages,
+    iconColor: "text-rose-600",
+    iconBg: "bg-rose-100 dark:bg-rose-500/15",
     chapters: [
       {
         number: 1,
-        title: "Ideology of Pakistan",
+        title: "Parts of Speech",
         description:
-          "Learn about the ideology of Pakistan and its historical background.",
+          "Learn nouns, pronouns, verbs, adjectives, adverbs, prepositions, conjunctions and interjections.",
       },
       {
         number: 2,
-        title: "Pakistan Movement",
+        title: "Tenses",
         description:
-          "Study the major events and personalities of the Pakistan Movement.",
+          "Understand present, past and future tenses with examples and exercises.",
       },
       {
         number: 3,
-        title: "Creation of Pakistan",
+        title: "Active and Passive Voice",
         description:
-          "Understand the events surrounding the establishment of Pakistan in 1947.",
+          "Learn how to convert sentences from active voice to passive voice.",
       },
       {
         number: 4,
-        title: "Constitution of Pakistan",
+        title: "Direct and Indirect Speech",
         description:
-          "Explore constitutional development and important constitutional principles.",
+          "Learn the rules for changing direct speech into indirect speech.",
       },
       {
         number: 5,
-        title: "Geography of Pakistan",
+        title: "Essay Writing",
         description:
-          "Learn about Pakistan's provinces, mountains, rivers and natural resources.",
+          "Learn essay structure, paragraph writing and how to organize ideas.",
       },
       {
         number: 6,
-        title: "Culture and Heritage",
+        title: "Comprehension",
         description:
-          "Explore the cultures, languages, traditions and heritage of Pakistan.",
+          "Practice reading passages and answering questions to improve understanding.",
       },
     ],
   },
@@ -259,7 +260,7 @@ const courses = [
   {
     title: "Mathematics",
     code: "MTH-101",
-    progress: 70,
+    progress: 0,
     icon: Calculator,
     iconColor: "text-green-600",
     iconBg: "bg-green-100 dark:bg-green-500/15",

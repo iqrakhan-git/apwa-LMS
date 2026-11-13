@@ -7,6 +7,14 @@ import { useMemo, useState } from "react";
 const initialAssignments = [
   {
     id: 1,
+    title: "Essay",
+    course: "CS-101",
+    dueDate: "2025-04-25",
+    priority: "High",
+    status: "Pending",
+    icon: "code",
+  }, {
+    id: 1,
     title: "Computer Science",
     course: "CS-101",
     dueDate: "2025-04-25",
